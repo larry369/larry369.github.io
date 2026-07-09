@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Larry Lai | Software Engineer RPG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <title>Larry Lai | Full-Stack Wizard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         :root{--gold:#f5c842;--pixel-green:#00ff41;--pixel-blue:#00d4ff;--pixel-red:#ff4757;--pixel-purple:#a855f7;--pixel-orange:#ff9f43;--dark-bg:#0a0a1a;--panel-bg:#111127;--panel-border:#2a2a4a}
-        body{background-color:var(--dark-bg);color:#e0e0e0;font-family:'VT323',monospace;overflow-x:hidden}
+        body{background-color:var(--dark-bg);color:#e0e0e0;font-family:'VT323','Noto Sans TC',monospace;overflow-x:hidden}
         #starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
         .scanlines{position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 3px);z-index:9999;pointer-events:none}
         .container{max-width:1100px;margin:0 auto;padding:20px;position:relative;z-index:1}
@@ -21,10 +21,12 @@
         .loading-percent{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#888;margin-top:10px}
 
         .title-screen{text-align:center;padding:60px 20px 40px}
-        .title-screen h1{font-family:'Press Start 2P',cursive;font-size:2.2rem;color:var(--gold);text-shadow:3px 3px 0 #b8860b,0 0 20px rgba(245,200,66,0.5);animation:titleGlow 2s ease-in-out infinite alternate;margin-bottom:15px;line-height:1.6}
+        .title-screen h1{font-family:'Press Start 2P',cursive;font-size:2.2rem;color:var(--gold);text-shadow:3px 3px 0 #b8860b,0 0 20px rgba(245,200,66,0.5);animation:titleGlow 2s ease-in-out infinite alternate;margin-bottom:10px;line-height:1.6}
         @keyframes titleGlow{from{text-shadow:3px 3px 0 #b8860b,0 0 20px rgba(245,200,66,0.3)}to{text-shadow:3px 3px 0 #b8860b,0 0 40px rgba(245,200,66,0.8)}}
-        .title-screen .subtitle{font-family:'Press Start 2P',cursive;font-size:0.85rem;color:var(--pixel-blue);margin-bottom:30px;animation:blink 1.2s step-end infinite}
+        .title-screen .subtitle{font-family:'Press Start 2P',cursive;font-size:0.85rem;color:var(--pixel-blue);margin-bottom:20px;animation:blink 1.2s step-end infinite}
         @keyframes blink{50%{opacity:0}}
+        .title-screen .real-name{font-family:'Noto Sans TC',sans-serif;font-size:1.8rem;color:#ccc;margin-bottom:5px}
+        .title-screen .info-line{font-size:1.2rem;color:#888;margin-bottom:25px}
         .class-badge{display:inline-block;background:linear-gradient(135deg,#1a1a3e,#2a2a5e);border:2px solid var(--gold);padding:10px 30px;font-family:'Press Start 2P',cursive;font-size:0.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:3px}
         .class-badge::before,.class-badge::after{content:'\2605';margin:0 10px}
 
@@ -38,7 +40,7 @@
 
         .dialogue-box{background:var(--panel-bg);border:2px solid var(--panel-border);padding:20px 25px;position:relative;margin:30px 0}
         .dialogue-box::before{content:'\1F4AC';position:absolute;top:-15px;left:20px;font-size:1.5rem;background:var(--dark-bg);padding:0 5px}
-        .dialogue-text{font-size:1.4rem;line-height:1.6;color:#ccc}
+        .dialogue-text{font-size:1.3rem;line-height:1.6;color:#ccc;font-family:'Noto Sans TC',sans-serif}
         .dialogue-text .highlight{color:var(--gold)}
         .dialogue-cursor{display:inline-block;width:10px;height:18px;background:var(--gold);animation:cursorBlink 0.8s step-end infinite;vertical-align:text-bottom;margin-left:2px}
         @keyframes cursorBlink{50%{opacity:0}}
@@ -52,7 +54,7 @@
         .char-info{display:flex;flex-direction:column;gap:15px}
         .char-name{font-family:'Press Start 2P',cursive;font-size:1.3rem;color:var(--gold)}
         .char-title{color:var(--pixel-purple);font-size:1.3rem;margin-top:5px}
-        .char-quote{color:#888;font-style:italic;margin-top:10px}
+        .char-quote{color:#888;font-style:italic;margin-top:10px;font-family:'Noto Sans TC',sans-serif}
         .bar-container{margin:5px 0}
         .bar-label{font-family:'Press Start 2P',cursive;font-size:0.55rem;margin-bottom:4px;display:flex;justify-content:space-between}
         .bar-label .stat-name{color:var(--pixel-red)}
@@ -77,24 +79,27 @@
         .stat-bar-fill{height:100%;background:var(--pixel-blue);width:0%;transition:width 1.5s ease-out}
 
         .skill-tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:15px}
-        .skill-node{text-align:center;padding:20px 10px;background:rgba(26,26,62,0.4);border:2px solid #2a2a4a;transition:all 0.3s;cursor:default;position:relative}
+        .skill-node{text-align:center;padding:20px 10px;background:rgba(26,26,62,0.4);border:2px solid #2a2a4a;transition:all 0.3s;cursor:pointer;position:relative}
         .skill-node:hover{border-color:var(--gold);transform:translateY(-5px);box-shadow:0 5px 20px rgba(245,200,66,0.2)}
         .skill-node:hover .skill-popup{opacity:1;transform:translateX(-50%) translateY(-5px);pointer-events:auto}
+        .skill-node.expanded{border-color:var(--pixel-green);background:rgba(0,255,65,0.05)}
         .skill-emoji{font-size:2.5rem;margin-bottom:10px;display:block}
         .skill-name{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#fff;margin-bottom:8px}
         .skill-level{font-size:1rem;color:var(--pixel-green)}
         .skill-stars{color:var(--gold);font-size:0.9rem;margin-top:5px;letter-spacing:2px}
         .skill-popup{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#1a1a3e;border:1px solid var(--gold);padding:8px 12px;font-size:1rem;white-space:nowrap;opacity:0;pointer-events:none;transition:all 0.3s;z-index:10}
+        .skill-detail{display:none;margin-top:10px;text-align:left;font-size:1rem;color:#aaa;font-family:'Noto Sans TC',sans-serif;line-height:1.4}
+        .skill-node.expanded .skill-detail{display:block}
 
         .quest-list{display:flex;flex-direction:column;gap:15px}
-        .quest-item{background:rgba(26,26,62,0.4);border-left:3px solid var(--pixel-green);padding:15px 20px;position:relative;transition:all 0.3s}
+        .quest-item{background:rgba(26,26,62,0.4);border-left:3px solid var(--pixel-green);padding:15px 20px;position:relative;transition:all 0.3s;cursor:pointer}
         .quest-item:hover{border-left-color:var(--gold);background:rgba(26,26,62,0.7);transform:translateX(5px)}
         .quest-item::before{content:'\2705';position:absolute;top:15px;right:15px}
         .quest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:5px}
         .quest-title{font-family:'Press Start 2P',cursive;font-size:0.65rem;color:var(--gold)}
         .quest-company{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:var(--pixel-purple);background:rgba(168,85,247,0.15);padding:3px 8px}
         .quest-period{font-size:1.1rem;color:#666}
-        .quest-desc{font-size:1.2rem;color:#aaa;line-height:1.5}
+        .quest-desc{font-size:1.15rem;color:#aaa;line-height:1.5;font-family:'Noto Sans TC',sans-serif}
         .quest-rewards{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
         .reward-tag{font-family:'Press Start 2P',cursive;font-size:0.45rem;padding:3px 8px;border:1px solid;text-transform:uppercase}
         .reward-tag.skill{border-color:var(--pixel-blue);color:var(--pixel-blue)}
@@ -102,7 +107,7 @@
         .reward-tag.lang{border-color:var(--pixel-orange);color:var(--pixel-orange)}
 
         .inventory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
-        .inventory-slot{background:rgba(26,26,62,0.4);border:2px solid #2a2a4a;padding:20px;transition:all 0.3s;position:relative;overflow:hidden}
+        .inventory-slot{background:rgba(26,26,62,0.4);border:2px solid #2a2a4a;padding:20px;transition:all 0.3s;position:relative;overflow:hidden;cursor:pointer}
         .inventory-slot:hover{border-color:var(--pixel-purple);box-shadow:0 0 20px rgba(168,85,247,0.2)}
         .inventory-slot::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(168,85,247,0.05),transparent);transition:left 0.5s}
         .inventory-slot:hover::after{left:100%}
@@ -113,17 +118,18 @@
         .rarity-epic{background:rgba(168,85,247,0.15);color:var(--pixel-purple);border:1px solid var(--pixel-purple)}
         .rarity-legendary{background:rgba(245,200,66,0.15);color:var(--gold);border:1px solid var(--gold)}
         .item-name{font-family:'Press Start 2P',cursive;font-size:0.6rem;color:#fff;margin-bottom:8px;line-height:1.6}
-        .item-desc{font-size:1.15rem;color:#888;line-height:1.4}
+        .item-desc{font-size:1.15rem;color:#888;line-height:1.4;font-family:'Noto Sans TC',sans-serif}
         .item-stats{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
         .item-stat{font-family:'Press Start 2P',cursive;font-size:0.4rem;color:var(--pixel-green)}
 
         .achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
-        .achievement{display:flex;align-items:center;gap:15px;padding:15px;background:rgba(26,26,62,0.4);border:1px solid #2a2a4a;transition:all 0.3s}
-        .achievement:hover{border-color:var(--gold);background:rgba(245,200,66,0.05)}
+        .achievement{display:flex;align-items:center;gap:15px;padding:15px;background:rgba(26,26,62,0.4);border:1px solid #2a2a4a;transition:all 0.3s;cursor:pointer}
+        .achievement:hover{border-color:var(--gold);background:rgba(245,200,66,0.05);transform:scale(1.02)}
+        .achievement.unlocked{border-color:var(--pixel-green)}
         .achievement-icon{font-size:2rem;width:50px;text-align:center;flex-shrink:0}
         .achievement-info{flex:1}
         .achievement-name{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:var(--gold);margin-bottom:5px}
-        .achievement-desc{font-size:1.1rem;color:#888}
+        .achievement-desc{font-size:1.1rem;color:#888;font-family:'Noto Sans TC',sans-serif}
 
         .teleport-links{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}
         .teleport-btn{font-family:'Press Start 2P',cursive;font-size:0.55rem;padding:15px 25px;background:transparent;border:2px solid var(--panel-border);color:#fff;cursor:pointer;transition:all 0.3s;text-decoration:none;display:flex;align-items:center;gap:10px}
@@ -138,7 +144,30 @@
         .particle{position:fixed;pointer-events:none;font-size:1rem;z-index:0;animation:floatUp linear forwards;opacity:0.5}
         @keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0.5}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
 
-        @media(max-width:768px){.title-screen h1{font-size:1.3rem}.character-sheet{grid-template-columns:1fr;justify-items:center;text-align:center}.char-info{align-items:center}.stats-grid{grid-template-columns:1fr}.inventory-grid{grid-template-columns:1fr}.achievement-grid{grid-template-columns:1fr}.skill-tree{grid-template-columns:repeat(3,1fr)}}
+        .click-particle{position:fixed;pointer-events:none;font-size:1.5rem;z-index:9998;animation:clickBurst 0.8s ease-out forwards}
+        @keyframes clickBurst{0%{transform:scale(1);opacity:1}100%{transform:scale(0) translateY(-50px);opacity:0}}
+
+        .counter-section{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:20px}
+        .counter-item{text-align:center;padding:20px;background:rgba(26,26,62,0.4);border:1px solid #2a2a4a}
+        .counter-value{font-family:'Press Start 2P',cursive;font-size:1.8rem;color:var(--gold);margin-bottom:5px}
+        .counter-label{font-size:1rem;color:#888;font-family:'Noto Sans TC',sans-serif}
+
+        .theme-toggle{position:fixed;top:20px;right:20px;z-index:10001;background:var(--panel-bg);border:2px solid var(--panel-border);padding:10px;cursor:pointer;font-size:1.2rem;transition:all 0.3s;border-radius:50%;width:45px;height:45px;display:flex;align-items:center;justify-content:center}
+        .theme-toggle:hover{border-color:var(--gold);transform:rotate(180deg)}
+
+        .back-to-top{position:fixed;bottom:20px;right:20px;z-index:10001;background:var(--panel-bg);border:2px solid var(--panel-border);padding:10px;cursor:pointer;font-size:1.2rem;transition:all 0.3s;opacity:0;pointer-events:none;border-radius:50%;width:45px;height:45px;display:flex;align-items:center;justify-content:center}
+        .back-to-top.visible{opacity:1;pointer-events:auto}
+        .back-to-top:hover{border-color:var(--gold);transform:translateY(-3px)}
+
+        .mini-game-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10002;display:none;align-items:center;justify-content:center;flex-direction:column}
+        .mini-game-overlay.active{display:flex}
+        .mini-game-title{font-family:'Press Start 2P',cursive;font-size:1rem;color:var(--gold);margin-bottom:20px}
+        .mini-game-score{font-family:'Press Start 2P',cursive;font-size:0.7rem;color:var(--pixel-green);margin-bottom:15px}
+        .mini-game-canvas{border:2px solid var(--gold);background:#111}
+        .mini-game-close{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#888;cursor:pointer;margin-top:15px;padding:10px;border:1px solid #444;background:transparent}
+        .mini-game-close:hover{color:var(--gold);border-color:var(--gold)}
+
+        @media(max-width:768px){.title-screen h1{font-size:1.3rem}.character-sheet{grid-template-columns:1fr;justify-items:center;text-align:center}.char-info{align-items:center}.stats-grid{grid-template-columns:1fr}.inventory-grid{grid-template-columns:1fr}.achievement-grid{grid-template-columns:1fr}.skill-tree{grid-template-columns:repeat(3,1fr)}.counter-section{grid-template-columns:repeat(2,1fr)}}
     </style>
 </head>
 <body>
@@ -149,6 +178,9 @@
     <div class="loading-percent" id="loadingPercent">0%</div>
 </div>
 
+<button class="theme-toggle" id="themeToggle" title="Toggle Theme">&#x1F319;</button>
+<button class="back-to-top" id="backToTop" title="Back to Top">&#x2B06;&#xFE0F;</button>
+
 <div class="scanlines"></div>
 <canvas id="starfield"></canvas>
 
@@ -156,13 +188,28 @@
 
     <div class="title-screen">
         <h1>LARRY LAI</h1>
+        <div class="real-name">&#x8CFD;&#x5F6D;&#x5EF7;</div>
         <div class="subtitle">PRESS START TO CONTINUE</div>
-        <div class="class-badge">Software Engineer</div>
+        <div class="info-line">33 &#x6B72; / &#x5168;&#x7AEF;&#x8EDF;&#x9AD4;&#x5DE5;&#x7A0B;&#x5EFA;&#x5E2B; / 4+ &#x5E74;</div>
+        <div class="class-badge">Full-Stack Wizard</div>
     </div>
 
     <div class="dialogue-box">
         <div class="dialogue-text" id="dialogueText"></div>
         <span class="dialogue-cursor"></span>
+    </div>
+
+    <!-- Stats Counter -->
+    <div class="panel" id="panel0">
+        <div class="panel-header"><span class="icon">&#x1F4CA;</span><h2>Adventure Stats</h2></div>
+        <div class="panel-body">
+            <div class="counter-section">
+                <div class="counter-item"><div class="counter-value" data-target="4">0</div><div class="counter-label">Years of Experience</div></div>
+                <div class="counter-item"><div class="counter-value" data-target="3">0</div><div class="counter-label">Companies</div></div>
+                <div class="counter-item"><div class="counter-value" data-target="7">0</div><div class="counter-label">Projects</div></div>
+                <div class="counter-item"><div class="counter-value" data-target="9">0</div><div class="counter-label">Tech Skills</div></div>
+            </div>
+        </div>
     </div>
 
     <!-- Character Sheet -->
@@ -191,7 +238,7 @@
                         <div class="bar-label"><span class="stat-name xp">XP</span><span class="stat-value">MAX</span></div>
                         <div class="bar"><div class="bar-fill xp" data-width="92"></div></div>
                     </div>
-                    <div class="char-quote">"Every bug is just a feature that hasn't been documented yet."</div>
+                    <div class="char-quote">&#x201C;&#x6211;&#x559C;&#x6B61;&#x5718;&#x968A;&#x5408;&#x4F5C;&#xFF0C;&#x4E5F;&#x80FD;&#x7368;&#x7ACB;&#x958B;&#x767C;&#xFF0C;&#x9748;&#x6D3B;&#x9069;&#x61C9;&#x6280;&#x8853;&#x9700;&#x6C42;&#xFF0C;&#x8FFD;&#x6C42;&#x6311;&#x8A25;&#x8207;&#x6210;&#x9577;&#x3002;&#x201D;</div>
                 </div>
             </div>
         </div>
@@ -199,15 +246,15 @@
 
     <!-- Attributes -->
     <div class="panel" id="panel2">
-        <div class="panel-header"><span class="icon">&#x1F4CA;</span><h2>Attributes</h2></div>
+        <div class="panel-header"><span class="icon">&#x2694;&#xFE0F;</span><h2>Attributes</h2></div>
         <div class="panel-body">
             <div class="stats-grid">
-                <div class="stat-item"><div class="stat-icon">&#x2694;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">BACKEND</div><div class="stat-value-label">95</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="95"></div></div></div></div>
-                <div class="stat-item"><div class="stat-icon">&#x1F6E1;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">FRONTEND</div><div class="stat-value-label">85</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="85"></div></div></div></div>
-                <div class="stat-item"><div class="stat-icon">&#x1F9EA;</div><div class="stat-details"><div class="stat-name-label">TESTING</div><div class="stat-value-label">80</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="80"></div></div></div></div>
-                <div class="stat-item"><div class="stat-icon">&#x1F3D7;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">ARCHITECTURE</div><div class="stat-value-label">88</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="88"></div></div></div></div>
-                <div class="stat-item"><div class="stat-icon">&#x1F3AF;</div><div class="stat-details"><div class="stat-name-label">DEVOPS</div><div class="stat-value-label">75</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="75"></div></div></div></div>
-                <div class="stat-item"><div class="stat-icon">&#x1F9E0;</div><div class="stat-details"><div class="stat-name-label">PROBLEM SOLVING</div><div class="stat-value-label">92</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="92"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F3D7;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">BACKEND (.NET/Spring)</div><div class="stat-value-label">92</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="92"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F3A8;</div><div class="stat-details"><div class="stat-name-label">FRONTEND (React/Angular)</div><div class="stat-value-label">88</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="88"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F4E6;</div><div class="stat-details"><div class="stat-name-label">DATABASE (MSSQL/PG)</div><div class="stat-value-label">85</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="85"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x2699;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">DEVOPS (Docker/K8s)</div><div class="stat-value-label">78</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="78"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F4CA;</div><div class="stat-details"><div class="stat-name-label">ERP/MES SYSTEM</div><div class="stat-value-label">90</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="90"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F91D;</div><div class="stat-details"><div class="stat-name-label">TEAM COLLABORATION</div><div class="stat-value-label">95</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="95"></div></div></div></div>
             </div>
         </div>
     </div>
@@ -217,14 +264,70 @@
         <div class="panel-header"><span class="icon">&#x1F333;</span><h2>Skill Tree</h2></div>
         <div class="panel-body">
             <div class="skill-tree">
-                <div class="skill-node"><span class="skill-popup">+500 Agility</span><span class="skill-emoji">&#x1F980;</span><div class="skill-name">Rust</div><div class="skill-level">Master</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div></div>
-                <div class="skill-node"><span class="skill-popup">+400 Intelligence</span><span class="skill-emoji">&#x1F40D;</span><div class="skill-name">Python</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
-                <div class="skill-node"><span class="skill-popup">+450 Power</span><span class="skill-emoji">&#x269B;&#xFE0F;</span><div class="skill-name">React</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
-                <div class="skill-node"><span class="skill-popup">+350 Wisdom</span><span class="skill-emoji">&#x1F7E2;</span><div class="skill-name">Go</div><div class="skill-level">Advanced</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
-                <div class="skill-node"><span class="skill-popup">+380 Magic</span><span class="skill-emoji">&#x1F537;</span><div class="skill-name">TypeScript</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
-                <div class="skill-node"><span class="skill-popup">+300 Defense</span><span class="skill-emoji">&#x1F433;</span><div class="skill-name">Docker</div><div class="skill-level">Advanced</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2606;&#x2606;</div></div>
-                <div class="skill-node"><span class="skill-popup">+320 Spirit</span><span class="skill-emoji">&#x2638;&#xFE0F;</span><div class="skill-name">K8s</div><div class="skill-level">Advanced</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2606;&#x2606;</div></div>
-                <div class="skill-node"><span class="skill-popup">+280 Luck</span><span class="skill-emoji">&#x1F5C4;&#xFE0F;</span><div class="skill-name">SQL</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+500 Intelligence</span>
+                    <span class="skill-emoji">&#x1F535;</span>
+                    <div class="skill-name">C# / .NET</div>
+                    <div class="skill-level">Master</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+                    <div class="skill-detail">WebForm, WinForm, Restful API, SignalR, Quartz.NET</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+450 Power</span>
+                    <span class="skill-emoji">&#x269B;&#xFE0F;</span>
+                    <div class="skill-name">React / Next.js</div>
+                    <div class="skill-level">Expert</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div>
+                    <div class="skill-detail">Next.js, Vite, Hooks, State Management</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+400 Precision</span>
+                    <span class="skill-emoji">&#x1F535;</span>
+                    <div class="skill-name">Angular</div>
+                    <div class="skill-level">Expert</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div>
+                    <div class="skill-detail">TypeScript, RxJS, Components, Services</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+420 Wisdom</span>
+                    <span class="skill-emoji">&#x1F7E2;</span>
+                    <div class="skill-name">Java / Spring</div>
+                    <div class="skill-level">Advanced</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div>
+                    <div class="skill-detail">Spring Boot, REST API, Microservices</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+380 Magic</span>
+                    <span class="skill-emoji">&#x1F4DD;</span>
+                    <div class="skill-name">TypeScript</div>
+                    <div class="skill-level">Expert</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div>
+                    <div class="skill-detail">Strong typing, Interfaces, Generics</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+300 Defense</span>
+                    <span class="skill-emoji">&#x1F5C4;&#xFE0F;</span>
+                    <div class="skill-name">MSSQL / PG</div>
+                    <div class="skill-level">Expert</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div>
+                    <div class="skill-detail">Stored Procedures, Query Optimization, SSRS</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+320 Spirit</span>
+                    <span class="skill-emoji">&#x1F433;</span>
+                    <div class="skill-name">Docker / K8s</div>
+                    <div class="skill-level">Advanced</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2606;&#x2606;</div>
+                    <div class="skill-detail">k3s, k8s, Caprover, Container Orchestration</div>
+                </div>
+                <div class="skill-node" onclick="this.classList.toggle('expanded')">
+                    <span class="skill-popup">+280 Agility</span>
+                    <span class="skill-emoji">&#x1F4BB;</span>
+                    <div class="skill-name">Git / CI/CD</div>
+                    <div class="skill-level">Advanced</div>
+                    <div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2606;&#x2606;</div>
+                    <div class="skill-detail">GitHub, GitLab, SVN, Version Control</div>
+                </div>
             </div>
         </div>
     </div>
@@ -234,23 +337,23 @@
         <div class="panel-header"><span class="icon">&#x1F4DC;</span><h2>Quest Log</h2></div>
         <div class="panel-body">
             <div class="quest-list">
-                <div class="quest-item">
-                    <div class="quest-header"><div class="quest-title">&#x1F3F0; Senior Software Engineer</div><span class="quest-company">Epic Corp</span></div>
-                    <div class="quest-period">2022 - Present</div>
-                    <div class="quest-desc">Led a party of 8 adventurers to build a distributed system serving 1M+ daily users. Slayed the infamous "Legacy Code Dragon" and achieved 99.9% uptime.</div>
-                    <div class="quest-rewards"><span class="reward-tag skill">System Design</span><span class="reward-tag tool">Kubernetes</span><span class="reward-tag lang">Go</span><span class="reward-tag skill">Team Lead</span></div>
+                <div class="quest-item" onclick="this.classList.toggle('expanded')">
+                    <div class="quest-header"><div class="quest-title">&#x1F3E2; &#x5BF6;&#x6210;&#x5DE5;&#x696D; | &#x8EDF;&#x9AD4;&#x5DE5;&#x7A0B;&#x5E2B;</div><span class="quest-company">NOW</span></div>
+                    <div class="quest-period">2025/7 ~ &#x73FE;&#x5728;</div>
+                    <div class="quest-desc">&#x958B;&#x767C;&#x8207;&#x7DAD;&#x8B77;&#x96C6;&#x5718; GSCM &#x5168;&#x7403;&#x4F9B;&#x61C9;&#x93C8;&#x5354;&#x4F5C;&#x7CFB;&#x7D71;&#xFF0C;&#x8207;&#x5718;&#x968A;&#x6210;&#x54E1;&#x5171;&#x540C;&#x8CA0;&#x8CAC;B2B, &#x6A19;&#x6848;, &#x5831;&#x50F9;&#x7B49;&#x7CFB;&#x7D71;&#x958B;&#x767C;&#x8207;&#x7DAD;&#x904B;&#x5DE5;&#x4F5C;&#x3002;</div>
+                    <div class="quest-rewards"><span class="reward-tag skill">GSCM</span><span class="reward-tag tool">B2B</span><span class="reward-tag lang">Supply Chain</span></div>
                 </div>
-                <div class="quest-item">
-                    <div class="quest-header"><div class="quest-title">&#x2694;&#xFE0F; Software Engineer</div><span class="quest-company">Tech Guild</span></div>
-                    <div class="quest-period">2019 - 2022</div>
-                    <div class="quest-desc">Completed 50+ main quests and 200+ side quests. Mastered the art of RESTful APIs and conquered the Database Dungeon.</div>
-                    <div class="quest-rewards"><span class="reward-tag skill">API Design</span><span class="reward-tag tool">AWS</span><span class="reward-tag lang">Python</span><span class="reward-tag lang">TypeScript</span></div>
+                <div class="quest-item" onclick="this.classList.toggle('expanded')">
+                    <div class="quest-header"><div class="quest-title">&#x1F3D7;&#xFE0F; &#x4E09;&#x4E45;&#x5EFA;&#x6750; | &#x8EDF;&#x9AD4;&#x5DE5;&#x7A0B;&#x5E2B;</div><span class="quest-company">CLEAR</span></div>
+                    <div class="quest-period">2024/6 ~ 2025/4</div>
+                    <div class="quest-desc">&#x7ACB;&#x9AD4;&#x5009;&#x5132;&#x4E32;&#x63A5;&#xFF1A;&#x6574;&#x5408; ERP &#x8207;&#x5009;&#x5132;&#x7CFB;&#x7D71;&#x3002;&#x81EA;&#x5B9A;&#x7FA9;&#x5BE9;&#x6838;&#x6A21;&#x7D44;&#xFF1A;&#x652F;&#x63F4;&#x81EA;&#x8A02;&#x5BE9;&#x6279;&#x6D41;&#x7A0B;&#x3002;ERP &#x8207; MES &#x6574;&#x5408;&#xFF1A;&#x958B;&#x767C;&#x5DE5;&#x55AE;&#x8F49;&#x63DB;&#x529F;&#x80FD;&#x3002;</div>
+                    <div class="quest-rewards"><span class="reward-tag skill">ERP</span><span class="reward-tag tool">MES</span><span class="reward-tag skill">Warehouse</span></div>
                 </div>
-                <div class="quest-item">
-                    <div class="quest-header"><div class="quest-title">&#x1F393; CS Degree Quest</div><span class="quest-company">University of Code</span></div>
-                    <div class="quest-period">2015 - 2019</div>
-                    <div class="quest-desc">Forged in the fires of Algorithm Mountain and the Swamp of Operating Systems. Emerged victorious with the legendary "Bachelor of Science" artifact.</div>
-                    <div class="quest-rewards"><span class="reward-tag skill">Algorithms</span><span class="reward-tag skill">Data Structures</span><span class="reward-tag lang">C++</span><span class="reward-tag skill">Computer Science</span></div>
+                <div class="quest-item" onclick="this.classList.toggle('expanded')">
+                    <div class="quest-header"><div class="quest-title">&#x2694;&#xFE0F; &#x5BF6;&#x6210;&#x5DE5;&#x696D; | &#x8EDF;&#x9AD4;&#x5DE5;&#x7A0B;&#x5E2B;</div><span class="quest-company">CLEAR</span></div>
+                    <div class="quest-period">2021/11 ~ 2023/5</div>
+                    <div class="quest-desc">&#x958B;&#x767C;&#x8207;&#x7DAD;&#x8B77; MES &#x7A0B;&#x5F0F;&#x3001;&#x5831;&#x8868;&#x3001;&#x524D;&#x5F8C;&#x7AEF;&#x7CFB;&#x7D71;&#x3002;&#x5C0E;&#x5165; GitLab &#x7248;&#x63A7;&#xFF0C;&#x8CA0;&#x8CAC;&#x6559;&#x80B2;&#x8A13;&#x7DF4;&#x3002;&#x958B;&#x767C; RFID &#x770B;&#x677F;&#x7CFB;&#x7D71;&#x3002;Docker &#x6559;&#x80B2;&#x8A13;&#x7DF4;&#x3002;</div>
+                    <div class="quest-rewards"><span class="reward-tag skill">MES</span><span class="reward-tag tool">GitLab</span><span class="reward-tag lang">Docker</span><span class="reward-tag skill">RFID</span></div>
                 </div>
             </div>
         </div>
@@ -261,33 +364,33 @@
         <div class="panel-header"><span class="icon">&#x1F392;</span><h2>Inventory</h2></div>
         <div class="panel-body">
             <div class="inventory-grid">
-                <div class="inventory-slot">
-                    <div class="item-icon">&#x1F310;</div>
+                <div class="inventory-slot" onclick="this.classList.toggle('expanded')">
+                    <div class="item-icon">&#x1F3ED;</div>
                     <span class="item-rarity rarity-legendary">Legendary</span>
-                    <div class="item-name">Project Phoenix</div>
-                    <div class="item-desc">A full-stack web application that rose from the ashes of legacy systems. Handles 10K requests/sec with zero downtime.</div>
+                    <div class="item-name">GSCM &#x5168;&#x7403;&#x4F9B;&#x61C9;&#x93C8;&#x7CFB;&#x7D71;</div>
+                    <div class="item-desc">&#x8CA0;&#x8CAC;&#x96C6;&#x5718; B2B, &#x6A19;&#x6848;, &#x5831;&#x50F9;&#x7B49;&#x7CFB;&#x7D71;&#x958B;&#x767C;&#x8207;&#x7DAD;&#x904B;&#xFF0C;&#x670D;&#x52D5;&#x5168;&#x7403;&#x4F9B;&#x61C9;&#x93C8;&#x5354;&#x4F5C;&#x3002;</div>
                     <div class="item-stats"><span class="item-stat">+500 XP</span><span class="item-stat">+100 Gold</span></div>
                 </div>
-                <div class="inventory-slot">
-                    <div class="item-icon">&#x1F916;</div>
+                <div class="inventory-slot" onclick="this.classList.toggle('expanded')">
+                    <div class="item-icon">&#x1F4E6;</div>
                     <span class="item-rarity rarity-epic">Epic</span>
-                    <div class="item-name">AI Chat Companion</div>
-                    <div class="item-desc">An intelligent chatbot powered by machine learning. Understands context and remembers past conversations.</div>
+                    <div class="item-name">&#x7ACB;&#x9AD4;&#x5009;&#x5132;&#x7BA1;&#x7406;&#x7CFB;&#x7D71;</div>
+                    <div class="item-desc">&#x6574;&#x5408; ERP &#x8207;&#x5009;&#x5132;&#x7CFB;&#x7D71;&#xFF0C;&#x63D0;&#x5347;&#x5009;&#x5132;&#x4F5C;&#x696D;&#x53EF;&#x8996;&#x5316;&#x8207;&#x7CBE;&#x6E96;&#x5EA6;&#x3002;</div>
                     <div class="item-stats"><span class="item-stat">+350 XP</span><span class="item-stat">+75 Gold</span></div>
                 </div>
-                <div class="inventory-slot">
+                <div class="inventory-slot" onclick="this.classList.toggle('expanded')">
+                    <div class="item-icon">&#x1F9EA;</div>
+                    <span class="item-rarity rarity-epic">Epic</span>
+                    <div class="item-name">MES &#x5275;&#x65B0;&#x6846;&#x67B6;</div>
+                    <div class="item-desc">&#x898F;&#x5283;&#x8207;&#x958B;&#x767C; MES &#x81EA;&#x88FD;&#x7CFB;&#x7D71;&#x524D;&#x7AEF;&#x6846;&#x67B6;&#xFF0C;&#x652F;&#x63F4;&#x591A;&#x7A2E;&#x5DE5;&#x5EE0;&#x5831;&#x8868;&#x3002;</div>
+                    <div class="item-stats"><span class="item-stat">+300 XP</span><span class="item-stat">+60 Gold</span></div>
+                </div>
+                <div class="inventory-slot" onclick="this.classList.toggle('expanded')">
                     <div class="item-icon">&#x1F4F1;</div>
                     <span class="item-rarity rarity-rare">Rare</span>
-                    <div class="item-name">Mobile Quest App</div>
-                    <div class="item-desc">Cross-platform mobile app with offline support. Downloaded by 50K+ adventurers worldwide.</div>
+                    <div class="item-name">RFID &#x770B;&#x677F;&#x7CFB;&#x7D71;</div>
+                    <div class="item-desc">&#x958B;&#x767C;&#x4E26;&#x7DAD;&#x8B77;&#x6A21;&#x5177; RFID &#x770B;&#x677F;&#x7CFB;&#x7D71;&#xFF0C;&#x6D69;&#x76E4;&#x524D;&#x5F8C;&#x7AEF;&#x3002;</div>
                     <div class="item-stats"><span class="item-stat">+250 XP</span><span class="item-stat">+50 Gold</span></div>
-                </div>
-                <div class="inventory-slot">
-                    <div class="item-icon">&#x2699;&#xFE0F;</div>
-                    <span class="item-rarity rarity-epic">Epic</span>
-                    <div class="item-name">CI/CD Forge</div>
-                    <div class="item-desc">Automated deployment pipeline that reduced release time from days to minutes. Built with GitHub Actions and Docker.</div>
-                    <div class="item-stats"><span class="item-stat">+300 XP</span><span class="item-stat">+60 Gold</span></div>
                 </div>
             </div>
         </div>
@@ -298,13 +401,22 @@
         <div class="panel-header"><span class="icon">&#x1F3C6;</span><h2>Achievements Unlocked</h2></div>
         <div class="panel-body">
             <div class="achievement-grid">
-                <div class="achievement"><div class="achievement-icon">&#x1F41B;</div><div class="achievement-info"><div class="achievement-name">Bug Slayer</div><div class="achievement-desc">Fixed 1000+ bugs without breaking production</div></div></div>
-                <div class="achievement"><div class="achievement-icon">&#x1F319;</div><div class="achievement-info"><div class="achievement-name">Night Coder</div><div class="achievement-desc">Pushed code at 3AM on a Saturday</div></div></div>
-                <div class="achievement"><div class="achievement-icon">&#x1F525;</div><div class="achievement-info"><div class="achievement-name">Hot Streak</div><div class="achievement-desc">365-day GitHub contribution streak</div></div></div>
-                <div class="achievement"><div class="achievement-icon">&#x1F4DA;</div><div class="achievement-info"><div class="achievement-name">Knowledge Seeker</div><div class="achievement-desc">Read 100+ technical books and articles</div></div></div>
-                <div class="achievement"><div class="achievement-icon">&#x1F91D;</div><div class="achievement-info"><div class="achievement-name">Open Source Hero</div><div class="achievement-desc">Contributed to 10+ open source projects</div></div></div>
-                <div class="achievement"><div class="achievement-icon">&#x2615;</div><div class="achievement-info"><div class="achievement-name">Caffeine Powered</div><div class="achievement-desc">Consumed 9999 cups of coffee while coding</div></div></div>
+                <div class="achievement unlocked" onclick="this.classList.toggle('unlocked')"><div class="achievement-icon">&#x1F3ED;</div><div class="achievement-info"><div class="achievement-name">ERP Master</div><div class="achievement-desc">Mastered ERP system development across multiple companies</div></div></div>
+                <div class="achievement unlocked" onclick="this.classList.toggle('unlocked')"><div class="achievement-icon">&#x1F4E6;</div><div class="achievement-info"><div class="achievement-name">Warehouse Architect</div><div class="achievement-desc">Built automated warehouse management systems</div></div></div>
+                <div class="achievement unlocked" onclick="this.classList.toggle('unlocked')"><div class="achievement-icon">&#x1F525;</div><div class="achievement-info"><div class="achievement-name">Docker Trainer</div><div class="achievement-desc">Conducted Docker education and training sessions</div></div></div>
+                <div class="achievement unlocked" onclick="this.classList.toggle('unlocked')"><div class="achievement-icon">&#x1F4BB;</div><div class="achievement-info"><div class="achievement-name">Full-Stack Hero</div><div class="achievement-desc">Frontend + Backend + Database + DevOps</div></div></div>
+                <div class="achievement unlocked" onclick="this.classList.toggle('unlocked')"><div class="achievement-icon">&#x1F91D;</div><div class="achievement-info"><div class="achievement-name">Git Pioneer</div><div class="achievement-desc">Introduced GitLab version control to the team</div></div></div>
+                <div class="achievement unlocked" onclick="this.classList.toggle('unlocked')"><div class="achievement-icon">&#x2615;</div><div class="achievement-info"><div class="achievement-name">Caffeine Powered</div><div class="achievement-desc">Fueled by 9999 cups of coffee</div></div></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Mini Game -->
+    <div class="panel" id="panelGame">
+        <div class="panel-header"><span class="icon">&#x1F3AE;</span><h2>Mini Game</h2></div>
+        <div class="panel-body" style="text-align:center">
+            <div style="margin-bottom:15px;font-family:'Noto Sans TC',sans-serif;color:#888">&#x9EDE;&#x64CA;&#x4E0B;&#x65B9;&#x6309;&#x9215;&#x958B;&#x59CB;&#x5C0F;&#x904A;&#x6232;&#xFF01;</div>
+            <button class="teleport-btn" onclick="startMiniGame()" style="margin:0 auto"><span class="btn-icon">&#x1F3AE;</span><span>START GAME</span></button>
         </div>
     </div>
 
@@ -312,25 +424,31 @@
     <div class="panel" id="panel7">
         <div class="panel-header"><span class="icon">&#x1F300;</span><h2>Teleport Gate</h2></div>
         <div class="panel-body">
-            <div style="text-align:center;margin-bottom:20px"><div class="dialogue-text" style="font-size:1.2rem;color:#888">Choose your portal to reach Larry Lai in other realms...</div></div>
+            <div style="text-align:center;margin-bottom:20px"><div class="dialogue-text" style="font-size:1.2rem;color:#888;font-family:'Noto Sans TC',sans-serif">&#x9078;&#x64C7;&#x4F60;&#x7684;&#x 70B9;&#x9580;&#x5230;&#x5176;&#x4ED6;&#x6B21;&#x5143;&#x627E;&#x5230; Larry Lai...</div></div>
             <div class="teleport-links">
-                <a href="mailto:your@email.com" class="teleport-btn"><span class="btn-icon">&#x1F4E7;</span><span>EMAIL</span></a>
-                <a href="https://github.com/yourusername" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F419;</span><span>GITHUB</span></a>
-                <a href="https://linkedin.com/in/yourusername" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F4BC;</span><span>LINKEDIN</span></a>
-                <a href="https://twitter.com/yourusername" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F426;</span><span>TWITTER</span></a>
+                <a href="mailto:larrylai0306@gmail.com" class="teleport-btn"><span class="btn-icon">&#x1F4E7;</span><span>EMAIL</span></a>
+                <a href="https://github.com/larry369" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F419;</span><span>GITHUB</span></a>
+                <a href="https://github.com/larry369/larry369.github.io" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F310;</span><span>PORTFOLIO</span></a>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="game-footer">
         <div class="footer-text">
             <div>MADE WITH <span class="heart">&#x2764;</span> AND LOTS OF &#x2615;</div>
-            <div style="margin-top:8px">&copy; 2024 LARRY LAI | ALL RIGHTS RESERVED</div>
+            <div style="margin-top:8px">&copy; 2025 LARRY LAI | ALL RIGHTS RESERVED</div>
             <div style="margin-top:8px;color:#333">NO BUGS WERE HARMED IN THE MAKING OF THIS WEBSITE</div>
         </div>
     </div>
 
+</div>
+
+<!-- Mini Game Overlay -->
+<div class="mini-game-overlay" id="miniGameOverlay">
+    <div class="mini-game-title">&#x2B50; COIN COLLECTOR &#x2B50;</div>
+    <div class="mini-game-score">SCORE: <span id="gameScore">0</span></div>
+    <canvas id="gameCanvas" class="mini-game-canvas" width="400" height="400"></canvas>
+    <button class="mini-game-close" onclick="closeMiniGame()">CLOSE [ESC]</button>
 </div>
 
 <script>
@@ -356,97 +474,68 @@
     }, 200);
 })();
 
-// Starfield Background
+// Starfield
 (function() {
     var c = document.getElementById('starfield');
     var ctx = c.getContext('2d');
     var stars = [];
-
-    function resize() {
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
-    }
-
+    function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
     function create() {
         stars = [];
         var n = Math.floor((c.width * c.height) / 5000);
         for (var i = 0; i < n; i++) {
-            stars.push({
-                x: Math.random() * c.width,
-                y: Math.random() * c.height,
-                size: Math.random() * 2 + 0.5,
-                speed: Math.random() * 0.5 + 0.1,
-                opacity: Math.random()
-            });
+            stars.push({ x: Math.random() * c.width, y: Math.random() * c.height, size: Math.random() * 2 + 0.5, speed: Math.random() * 0.5 + 0.1, opacity: Math.random() });
         }
     }
-
     function draw() {
         ctx.clearRect(0, 0, c.width, c.height);
         stars.forEach(function(s) {
             s.opacity += (Math.random() - 0.5) * 0.02;
             s.opacity = Math.max(0.1, Math.min(1, s.opacity));
-            ctx.fillStyle = 'rgba(255, 255, 255, ' + s.opacity + ')';
+            ctx.fillStyle = 'rgba(255,255,255,' + s.opacity + ')';
             ctx.fillRect(s.x, s.y, s.size, s.size);
             s.y -= s.speed;
-            if (s.y < -5) {
-                s.y = c.height + 5;
-                s.x = Math.random() * c.width;
-            }
+            if (s.y < -5) { s.y = c.height + 5; s.x = Math.random() * c.width; }
         });
         requestAnimationFrame(draw);
     }
-
-    resize();
-    create();
-    draw();
-    window.addEventListener('resize', function() {
-        resize();
-        create();
-    });
+    resize(); create(); draw();
+    window.addEventListener('resize', function() { resize(); create(); });
 })();
 
 // Main Animations
 function initAnimations() {
-    // Dialogue Typewriter
+    // Typewriter
     var el = document.getElementById('dialogueText');
-    var text = "Welcome, brave traveler! You have stumbled upon the domain of <span class='highlight'>Larry Lai</span>, a Full-Stack Wizard who codes by day and debugs by night. Explore the panels below to discover his stats, skills, and legendary quests... \uD83D\uDDFA\uFE0F";
+    var text = "Hi, I'm <span class='highlight'>Larry Lai</span>, a Full-Stack Wizard from Taiwan. I specialize in ERP/MES systems, love building scalable solutions, and believe every bug is just an undocumented feature. Explore my stats below! \uD83D\uDDFA\uFE0F";
     var i = 0;
-
     function type() {
         if (i < text.length) {
-            if (text[i] === '<') {
-                var ci = text.indexOf('>', i);
-                el.innerHTML += text.substring(i, ci + 1);
-                i = ci + 1;
-            } else {
-                el.innerHTML += text[i];
-                i++;
-            }
+            if (text[i] === '<') { var ci = text.indexOf('>', i); el.innerHTML += text.substring(i, ci + 1); i = ci + 1; }
+            else { el.innerHTML += text[i]; i++; }
             setTimeout(type, 25);
         }
     }
     type();
 
-    // Panel Scroll Animations
+    // Panel scroll animation
     var panels = document.querySelectorAll('.panel');
     var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
             if (e.isIntersecting) {
                 e.target.classList.add('visible');
                 e.target.querySelectorAll('[data-width]').forEach(function(b) {
-                    setTimeout(function() {
-                        b.style.width = b.dataset.width + '%';
-                    }, 300);
+                    setTimeout(function() { b.style.width = b.dataset.width + '%'; }, 300);
+                });
+                e.target.querySelectorAll('[data-target]').forEach(function(c) {
+                    animateCounter(c);
                 });
             }
         });
     }, { threshold: 0.1 });
-    panels.forEach(function(p) {
-        obs.observe(p);
-    });
+    panels.forEach(function(p) { obs.observe(p); });
 
-    // Floating Particles
+    // Floating particles
     var emojis = ['\u2728', '\u2B50', '\uD83D\uDCAB', '\uD83C\uDF1F', '\u2694\uFE0F', '\u1F6E1\uFE0F', '\u1F9EA', '\uD83D\uDC8E'];
     function spawn() {
         var d = document.createElement('div');
@@ -455,14 +544,60 @@ function initAnimations() {
         d.style.left = Math.random() * 100 + 'vw';
         d.style.animationDuration = (Math.random() * 10 + 10) + 's';
         document.body.appendChild(d);
-        setTimeout(function() {
-            d.remove();
-        }, 20000);
+        setTimeout(function() { d.remove(); }, 20000);
     }
     setInterval(spawn, 3000);
 }
 
-// Konami Code Easter Egg
+// Counter Animation
+function animateCounter(el) {
+    var target = parseInt(el.dataset.target);
+    var current = 0;
+    var step = Math.ceil(target / 30);
+    var iv = setInterval(function() {
+        current += step;
+        if (current >= target) { current = target; clearInterval(iv); }
+        el.textContent = current;
+    }, 50);
+}
+
+// Click Particles
+document.addEventListener('click', function(e) {
+    var emojis = ['\u2728', '\u2B50', '\u2764', '\uD83D\uDC8E', '\uD83C\uDF1F'];
+    for (var i = 0; i < 3; i++) {
+        var d = document.createElement('div');
+        d.className = 'click-particle';
+        d.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        d.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
+        d.style.top = (e.clientY + (Math.random() - 0.5) * 40) + 'px';
+        document.body.appendChild(d);
+        setTimeout(function(x) { x.remove(); }, 800, d);
+    }
+});
+
+// Theme Toggle
+document.getElementById('themeToggle').addEventListener('click', function() {
+    var isLight = document.body.style.backgroundColor === 'rgb(245, 245, 245)';
+    if (isLight) {
+        document.body.style.backgroundColor = '';
+        document.body.style.color = '';
+        this.innerHTML = '\uD83C\uDF19';
+    } else {
+        document.body.style.backgroundColor = '#f5f5f5';
+        document.body.style.color = '#333';
+        this.innerHTML = '\u2600\uFE0F';
+    }
+});
+
+// Back to Top
+var btt = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+    if (window.scrollY > 500) { btt.classList.add('visible'); }
+    else { btt.classList.remove('visible'); }
+});
+btt.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+// Konami Code
 (function() {
     var code = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
     var idx = 0;
@@ -475,11 +610,98 @@ function initAnimations() {
                 document.head.appendChild(s);
                 idx = 0;
             }
-        } else {
-            idx = 0;
-        }
+        } else { idx = 0; }
     });
 })();
+
+// Mini Game - Coin Collector
+var gameRunning = false;
+var gameScore = 0;
+var player = { x: 200, y: 380, size: 30 };
+var coins = [];
+var gameCanvas, gameCtx;
+
+function startMiniGame() {
+    document.getElementById('miniGameOverlay').classList.add('active');
+    gameCanvas = document.getElementById('gameCanvas');
+    gameCtx = gameCanvas.getContext('2d');
+    gameScore = 0;
+    player = { x: 200, y: 360, size: 30 };
+    coins = [];
+    gameRunning = true;
+    document.getElementById('gameScore').textContent = '0';
+    gameLoop();
+}
+
+function closeMiniGame() {
+    gameRunning = false;
+    document.getElementById('miniGameOverlay').classList.remove('active');
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeMiniGame();
+    if (!gameRunning) return;
+    if (e.key === 'ArrowLeft' && player.x > 15) player.x -= 20;
+    if (e.key === 'ArrowRight' && player.x < 385) player.x += 20;
+    if (e.key === 'ArrowUp' && player.y > 15) player.y -= 20;
+    if (e.key === 'ArrowDown' && player.y < 385) player.y += 20;
+});
+
+function gameLoop() {
+    if (!gameRunning) return;
+    gameCtx.fillStyle = '#111';
+    gameCtx.fillRect(0, 0, 400, 400);
+
+    // Player
+    gameCtx.fillStyle = '#00d4ff';
+    gameCtx.fillRect(player.x - player.size/2, player.y - player.size/2, player.size, player.size);
+    gameCtx.fillStyle = '#fff';
+    gameCtx.font = '16px "Press Start 2P"';
+    gameCtx.fillText('\uD83E\uDDD9', player.x - 10, player.y + 6);
+
+    // Spawn coins
+    if (Math.random() < 0.05) {
+        coins.push({ x: Math.random() * 380 + 10, y: 0, speed: Math.random() * 2 + 1, size: 20 });
+    }
+
+    // Draw & move coins
+    for (var i = coins.length - 1; i >= 0; i--) {
+        var c = coins[i];
+        c.y += c.speed;
+        gameCtx.fillStyle = '#f5c842';
+        gameCtx.beginPath();
+        gameCtx.arc(c.x, c.y, c.size/2, 0, Math.PI * 2);
+        gameCtx.fill();
+        gameCtx.fillStyle = '#000';
+        gameCtx.font = '12px "Press Start 2P"';
+        gameCtx.fillText('$', c.x - 4, c.y + 4);
+
+        // Collision
+        if (Math.abs(c.x - player.x) < 25 && Math.abs(c.y - player.y) < 25) {
+            gameScore += 10;
+            document.getElementById('gameScore').textContent = gameScore;
+            coins.splice(i, 1);
+        } else if (c.y > 400) {
+            coins.splice(i, 1);
+        }
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+// Touch support for mini game
+document.getElementById('gameCanvas').addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    if (!gameRunning) return;
+    var rect = gameCanvas.getBoundingClientRect();
+    var touch = e.touches[0];
+    var tx = touch.clientX - rect.left;
+    var ty = touch.clientY - rect.top;
+    if (tx < player.x) player.x = Math.max(15, player.x - 20);
+    else player.x = Math.min(385, player.x + 20);
+    if (ty < player.y) player.y = Math.max(15, player.y - 20);
+    else player.y = Math.min(385, player.y + 20);
+});
 </script>
 
 </body>
