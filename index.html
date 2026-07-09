@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Larry Lai | Software Engineer RPG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--gold:#f5c842;--pixel-green:#00ff41;--pixel-blue:#00d4ff;--pixel-red:#ff4757;--pixel-purple:#a855f7;--pixel-orange:#ff9f43;--dark-bg:#0a0a1a;--panel-bg:#111127;--panel-border:#2a2a4a}
+        body{background-color:var(--dark-bg);color:#e0e0e0;font-family:'VT323',monospace;overflow-x:hidden}
+        #starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        .scanlines{position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 3px);z-index:9999;pointer-events:none}
+        .container{max-width:1100px;margin:0 auto;padding:20px;position:relative;z-index:1}
+
+        .loading-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark-bg);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s}
+        .loading-screen.hidden{opacity:0;pointer-events:none}
+        .loading-text{font-family:'Press Start 2P',cursive;font-size:0.7rem;color:var(--gold);margin-bottom:20px}
+        .loading-bar{width:300px;height:20px;border:2px solid var(--gold);padding:3px}
+        .loading-bar-fill{height:100%;background:var(--gold);width:0%;transition:width 0.3s}
+        .loading-percent{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#888;margin-top:10px}
+
+        .title-screen{text-align:center;padding:60px 20px 40px}
+        .title-screen h1{font-family:'Press Start 2P',cursive;font-size:2.2rem;color:var(--gold);text-shadow:3px 3px 0 #b8860b,0 0 20px rgba(245,200,66,0.5);animation:titleGlow 2s ease-in-out infinite alternate;margin-bottom:15px;line-height:1.6}
+        @keyframes titleGlow{from{text-shadow:3px 3px 0 #b8860b,0 0 20px rgba(245,200,66,0.3)}to{text-shadow:3px 3px 0 #b8860b,0 0 40px rgba(245,200,66,0.8)}}
+        .title-screen .subtitle{font-family:'Press Start 2P',cursive;font-size:0.85rem;color:var(--pixel-blue);margin-bottom:30px;animation:blink 1.2s step-end infinite}
+        @keyframes blink{50%{opacity:0}}
+        .class-badge{display:inline-block;background:linear-gradient(135deg,#1a1a3e,#2a2a5e);border:2px solid var(--gold);padding:10px 30px;font-family:'Press Start 2P',cursive;font-size:0.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:3px}
+        .class-badge::before,.class-badge::after{content:'\2605';margin:0 10px}
+
+        .panel{background:var(--panel-bg);border:2px solid var(--panel-border);margin-bottom:25px;opacity:0;transform:translateY(30px);transition:opacity 0.6s,transform 0.6s,border-color 0.3s}
+        .panel:hover{border-color:var(--gold)}
+        .panel.visible{opacity:1;transform:translateY(0)}
+        .panel-header{background:linear-gradient(90deg,#1a1a3e,#2a2a5e,#1a1a3e);padding:12px 20px;border-bottom:2px solid var(--panel-border);display:flex;align-items:center;gap:10px}
+        .panel-header h2{font-family:'Press Start 2P',cursive;font-size:0.75rem;color:var(--gold);text-transform:uppercase;letter-spacing:2px}
+        .panel-header .icon{font-size:1.2rem}
+        .panel-body{padding:25px}
+
+        .dialogue-box{background:var(--panel-bg);border:2px solid var(--panel-border);padding:20px 25px;position:relative;margin:30px 0}
+        .dialogue-box::before{content:'\1F4AC';position:absolute;top:-15px;left:20px;font-size:1.5rem;background:var(--dark-bg);padding:0 5px}
+        .dialogue-text{font-size:1.4rem;line-height:1.6;color:#ccc}
+        .dialogue-text .highlight{color:var(--gold)}
+        .dialogue-cursor{display:inline-block;width:10px;height:18px;background:var(--gold);animation:cursorBlink 0.8s step-end infinite;vertical-align:text-bottom;margin-left:2px}
+        @keyframes cursorBlink{50%{opacity:0}}
+
+        .character-sheet{display:grid;grid-template-columns:200px 1fr;gap:30px;align-items:start}
+        .avatar-frame{text-align:center}
+        .avatar{width:160px;height:160px;border:3px solid var(--gold);background:#1a1a3e;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden;margin-bottom:10px}
+        .avatar::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent 0%,rgba(245,200,66,0.1) 10%,transparent 20%);animation:avatarShine 4s linear infinite}
+        @keyframes avatarShine{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .level-badge{font-family:'Press Start 2P',cursive;font-size:0.6rem;color:var(--pixel-green);margin-top:5px}
+        .char-info{display:flex;flex-direction:column;gap:15px}
+        .char-name{font-family:'Press Start 2P',cursive;font-size:1.3rem;color:var(--gold)}
+        .char-title{color:var(--pixel-purple);font-size:1.3rem;margin-top:5px}
+        .char-quote{color:#888;font-style:italic;margin-top:10px}
+        .bar-container{margin:5px 0}
+        .bar-label{font-family:'Press Start 2P',cursive;font-size:0.55rem;margin-bottom:4px;display:flex;justify-content:space-between}
+        .bar-label .stat-name{color:var(--pixel-red)}
+        .bar-label .stat-name.mp{color:var(--pixel-blue)}
+        .bar-label .stat-name.xp{color:var(--pixel-green)}
+        .bar-label .stat-value{color:#fff}
+        .bar{height:18px;background:#1a1a2e;border:2px solid #333;overflow:hidden}
+        .bar-fill{height:100%;width:0%;transition:width 1.5s ease-out;position:relative}
+        .bar-fill.hp{background:linear-gradient(180deg,#ff4757,#c0392b);box-shadow:0 0 10px rgba(255,71,87,0.5)}
+        .bar-fill.mp{background:linear-gradient(180deg,#00d4ff,#0984e3);box-shadow:0 0 10px rgba(0,212,255,0.5)}
+        .bar-fill.xp{background:linear-gradient(180deg,#00ff41,#00b894);box-shadow:0 0 10px rgba(0,255,65,0.5)}
+        .bar-fill::after{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:rgba(255,255,255,0.15)}
+
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+        .stat-item{background:rgba(26,26,62,0.6);border:1px solid #2a2a4a;padding:12px 15px;display:flex;align-items:center;gap:12px;transition:all 0.3s}
+        .stat-item:hover{border-color:var(--pixel-blue);background:rgba(0,212,255,0.05);transform:translateX(5px)}
+        .stat-icon{font-size:1.5rem;width:40px;text-align:center}
+        .stat-details{flex:1}
+        .stat-name-label{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#888;margin-bottom:4px}
+        .stat-value-label{font-size:1.4rem;color:#fff}
+        .stat-bar-mini{height:4px;background:#1a1a2e;margin-top:5px}
+        .stat-bar-fill{height:100%;background:var(--pixel-blue);width:0%;transition:width 1.5s ease-out}
+
+        .skill-tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:15px}
+        .skill-node{text-align:center;padding:20px 10px;background:rgba(26,26,62,0.4);border:2px solid #2a2a4a;transition:all 0.3s;cursor:default;position:relative}
+        .skill-node:hover{border-color:var(--gold);transform:translateY(-5px);box-shadow:0 5px 20px rgba(245,200,66,0.2)}
+        .skill-node:hover .skill-popup{opacity:1;transform:translateX(-50%) translateY(-5px);pointer-events:auto}
+        .skill-emoji{font-size:2.5rem;margin-bottom:10px;display:block}
+        .skill-name{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#fff;margin-bottom:8px}
+        .skill-level{font-size:1rem;color:var(--pixel-green)}
+        .skill-stars{color:var(--gold);font-size:0.9rem;margin-top:5px;letter-spacing:2px}
+        .skill-popup{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#1a1a3e;border:1px solid var(--gold);padding:8px 12px;font-size:1rem;white-space:nowrap;opacity:0;pointer-events:none;transition:all 0.3s;z-index:10}
+
+        .quest-list{display:flex;flex-direction:column;gap:15px}
+        .quest-item{background:rgba(26,26,62,0.4);border-left:3px solid var(--pixel-green);padding:15px 20px;position:relative;transition:all 0.3s}
+        .quest-item:hover{border-left-color:var(--gold);background:rgba(26,26,62,0.7);transform:translateX(5px)}
+        .quest-item::before{content:'\2705';position:absolute;top:15px;right:15px}
+        .quest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:5px}
+        .quest-title{font-family:'Press Start 2P',cursive;font-size:0.65rem;color:var(--gold)}
+        .quest-company{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:var(--pixel-purple);background:rgba(168,85,247,0.15);padding:3px 8px}
+        .quest-period{font-size:1.1rem;color:#666}
+        .quest-desc{font-size:1.2rem;color:#aaa;line-height:1.5}
+        .quest-rewards{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+        .reward-tag{font-family:'Press Start 2P',cursive;font-size:0.45rem;padding:3px 8px;border:1px solid;text-transform:uppercase}
+        .reward-tag.skill{border-color:var(--pixel-blue);color:var(--pixel-blue)}
+        .reward-tag.tool{border-color:var(--pixel-green);color:var(--pixel-green)}
+        .reward-tag.lang{border-color:var(--pixel-orange);color:var(--pixel-orange)}
+
+        .inventory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
+        .inventory-slot{background:rgba(26,26,62,0.4);border:2px solid #2a2a4a;padding:20px;transition:all 0.3s;position:relative;overflow:hidden}
+        .inventory-slot:hover{border-color:var(--pixel-purple);box-shadow:0 0 20px rgba(168,85,247,0.2)}
+        .inventory-slot::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(168,85,247,0.05),transparent);transition:left 0.5s}
+        .inventory-slot:hover::after{left:100%}
+        .item-icon{font-size:2rem;margin-bottom:10px}
+        .item-rarity{font-family:'Press Start 2P',cursive;font-size:0.45rem;padding:2px 8px;display:inline-block;margin-bottom:8px;text-transform:uppercase}
+        .rarity-common{background:rgba(150,150,150,0.3);color:#aaa;border:1px solid #666}
+        .rarity-rare{background:rgba(0,212,255,0.15);color:var(--pixel-blue);border:1px solid var(--pixel-blue)}
+        .rarity-epic{background:rgba(168,85,247,0.15);color:var(--pixel-purple);border:1px solid var(--pixel-purple)}
+        .rarity-legendary{background:rgba(245,200,66,0.15);color:var(--gold);border:1px solid var(--gold)}
+        .item-name{font-family:'Press Start 2P',cursive;font-size:0.6rem;color:#fff;margin-bottom:8px;line-height:1.6}
+        .item-desc{font-size:1.15rem;color:#888;line-height:1.4}
+        .item-stats{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+        .item-stat{font-family:'Press Start 2P',cursive;font-size:0.4rem;color:var(--pixel-green)}
+
+        .achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+        .achievement{display:flex;align-items:center;gap:15px;padding:15px;background:rgba(26,26,62,0.4);border:1px solid #2a2a4a;transition:all 0.3s}
+        .achievement:hover{border-color:var(--gold);background:rgba(245,200,66,0.05)}
+        .achievement-icon{font-size:2rem;width:50px;text-align:center;flex-shrink:0}
+        .achievement-info{flex:1}
+        .achievement-name{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:var(--gold);margin-bottom:5px}
+        .achievement-desc{font-size:1.1rem;color:#888}
+
+        .teleport-links{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}
+        .teleport-btn{font-family:'Press Start 2P',cursive;font-size:0.55rem;padding:15px 25px;background:transparent;border:2px solid var(--panel-border);color:#fff;cursor:pointer;transition:all 0.3s;text-decoration:none;display:flex;align-items:center;gap:10px}
+        .teleport-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px);box-shadow:0 5px 20px rgba(245,200,66,0.2)}
+        .teleport-btn .btn-icon{font-size:1.2rem}
+
+        .game-footer{text-align:center;padding:40px 20px;border-top:1px solid var(--panel-border);margin-top:40px}
+        .footer-text{font-family:'Press Start 2P',cursive;font-size:0.5rem;color:#444;line-height:2.5}
+        .footer-text .heart{color:var(--pixel-red);display:inline-block;animation:heartbeat 1.5s ease-in-out infinite}
+        @keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+
+        .particle{position:fixed;pointer-events:none;font-size:1rem;z-index:0;animation:floatUp linear forwards;opacity:0.5}
+        @keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0.5}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
+
+        @media(max-width:768px){.title-screen h1{font-size:1.3rem}.character-sheet{grid-template-columns:1fr;justify-items:center;text-align:center}.char-info{align-items:center}.stats-grid{grid-template-columns:1fr}.inventory-grid{grid-template-columns:1fr}.achievement-grid{grid-template-columns:1fr}.skill-tree{grid-template-columns:repeat(3,1fr)}}
+    </style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">LOADING QUEST DATA...</div>
+    <div class="loading-bar"><div class="loading-bar-fill" id="loadingBar"></div></div>
+    <div class="loading-percent" id="loadingPercent">0%</div>
+</div>
+
+<div class="scanlines"></div>
+<canvas id="starfield"></canvas>
+
+<div class="container">
+
+    <div class="title-screen">
+        <h1>LARRY LAI</h1>
+        <div class="subtitle">PRESS START TO CONTINUE</div>
+        <div class="class-badge">Software Engineer</div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="dialogue-text" id="dialogueText"></div>
+        <span class="dialogue-cursor"></span>
+    </div>
+
+    <!-- Character Sheet -->
+    <div class="panel" id="panel1">
+        <div class="panel-header"><span class="icon">&#x1F5E1;&#xFE0F;</span><h2>Character Sheet</h2></div>
+        <div class="panel-body">
+            <div class="character-sheet">
+                <div class="avatar-frame">
+                    <div class="avatar">&#x1F9D9;&#x200D;&#x2642;&#xFE0F;</div>
+                    <div class="level-badge">LV. 99</div>
+                </div>
+                <div class="char-info">
+                    <div>
+                        <div class="char-name">Larry Lai</div>
+                        <div class="char-title">Class: Full-Stack Wizard</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-label"><span class="stat-name">HP</span><span class="stat-value">&#x221E; / &#x221E;</span></div>
+                        <div class="bar"><div class="bar-fill hp" data-width="100"></div></div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-label"><span class="stat-name mp">MP</span><span class="stat-value">&#x2615; / &#x2615;</span></div>
+                        <div class="bar"><div class="bar-fill mp" data-width="85"></div></div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-label"><span class="stat-name xp">XP</span><span class="stat-value">MAX</span></div>
+                        <div class="bar"><div class="bar-fill xp" data-width="92"></div></div>
+                    </div>
+                    <div class="char-quote">"Every bug is just a feature that hasn't been documented yet."</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attributes -->
+    <div class="panel" id="panel2">
+        <div class="panel-header"><span class="icon">&#x1F4CA;</span><h2>Attributes</h2></div>
+        <div class="panel-body">
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-icon">&#x2694;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">BACKEND</div><div class="stat-value-label">95</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="95"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F6E1;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">FRONTEND</div><div class="stat-value-label">85</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="85"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F9EA;</div><div class="stat-details"><div class="stat-name-label">TESTING</div><div class="stat-value-label">80</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="80"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F3D7;&#xFE0F;</div><div class="stat-details"><div class="stat-name-label">ARCHITECTURE</div><div class="stat-value-label">88</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="88"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F3AF;</div><div class="stat-details"><div class="stat-name-label">DEVOPS</div><div class="stat-value-label">75</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="75"></div></div></div></div>
+                <div class="stat-item"><div class="stat-icon">&#x1F9E0;</div><div class="stat-details"><div class="stat-name-label">PROBLEM SOLVING</div><div class="stat-value-label">92</div><div class="stat-bar-mini"><div class="stat-bar-fill" data-width="92"></div></div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Tree -->
+    <div class="panel" id="panel3">
+        <div class="panel-header"><span class="icon">&#x1F333;</span><h2>Skill Tree</h2></div>
+        <div class="panel-body">
+            <div class="skill-tree">
+                <div class="skill-node"><span class="skill-popup">+500 Agility</span><span class="skill-emoji">&#x1F980;</span><div class="skill-name">Rust</div><div class="skill-level">Master</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div></div>
+                <div class="skill-node"><span class="skill-popup">+400 Intelligence</span><span class="skill-emoji">&#x1F40D;</span><div class="skill-name">Python</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
+                <div class="skill-node"><span class="skill-popup">+450 Power</span><span class="skill-emoji">&#x269B;&#xFE0F;</span><div class="skill-name">React</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
+                <div class="skill-node"><span class="skill-popup">+350 Wisdom</span><span class="skill-emoji">&#x1F7E2;</span><div class="skill-name">Go</div><div class="skill-level">Advanced</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
+                <div class="skill-node"><span class="skill-popup">+380 Magic</span><span class="skill-emoji">&#x1F537;</span><div class="skill-name">TypeScript</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
+                <div class="skill-node"><span class="skill-popup">+300 Defense</span><span class="skill-emoji">&#x1F433;</span><div class="skill-name">Docker</div><div class="skill-level">Advanced</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2606;&#x2606;</div></div>
+                <div class="skill-node"><span class="skill-popup">+320 Spirit</span><span class="skill-emoji">&#x2638;&#xFE0F;</span><div class="skill-name">K8s</div><div class="skill-level">Advanced</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2606;&#x2606;</div></div>
+                <div class="skill-node"><span class="skill-popup">+280 Luck</span><span class="skill-emoji">&#x1F5C4;&#xFE0F;</span><div class="skill-name">SQL</div><div class="skill-level">Expert</div><div class="skill-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2606;</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quest Log -->
+    <div class="panel" id="panel4">
+        <div class="panel-header"><span class="icon">&#x1F4DC;</span><h2>Quest Log</h2></div>
+        <div class="panel-body">
+            <div class="quest-list">
+                <div class="quest-item">
+                    <div class="quest-header"><div class="quest-title">&#x1F3F0; Senior Software Engineer</div><span class="quest-company">Epic Corp</span></div>
+                    <div class="quest-period">2022 - Present</div>
+                    <div class="quest-desc">Led a party of 8 adventurers to build a distributed system serving 1M+ daily users. Slayed the infamous "Legacy Code Dragon" and achieved 99.9% uptime.</div>
+                    <div class="quest-rewards"><span class="reward-tag skill">System Design</span><span class="reward-tag tool">Kubernetes</span><span class="reward-tag lang">Go</span><span class="reward-tag skill">Team Lead</span></div>
+                </div>
+                <div class="quest-item">
+                    <div class="quest-header"><div class="quest-title">&#x2694;&#xFE0F; Software Engineer</div><span class="quest-company">Tech Guild</span></div>
+                    <div class="quest-period">2019 - 2022</div>
+                    <div class="quest-desc">Completed 50+ main quests and 200+ side quests. Mastered the art of RESTful APIs and conquered the Database Dungeon.</div>
+                    <div class="quest-rewards"><span class="reward-tag skill">API Design</span><span class="reward-tag tool">AWS</span><span class="reward-tag lang">Python</span><span class="reward-tag lang">TypeScript</span></div>
+                </div>
+                <div class="quest-item">
+                    <div class="quest-header"><div class="quest-title">&#x1F393; CS Degree Quest</div><span class="quest-company">University of Code</span></div>
+                    <div class="quest-period">2015 - 2019</div>
+                    <div class="quest-desc">Forged in the fires of Algorithm Mountain and the Swamp of Operating Systems. Emerged victorious with the legendary "Bachelor of Science" artifact.</div>
+                    <div class="quest-rewards"><span class="reward-tag skill">Algorithms</span><span class="reward-tag skill">Data Structures</span><span class="reward-tag lang">C++</span><span class="reward-tag skill">Computer Science</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory -->
+    <div class="panel" id="panel5">
+        <div class="panel-header"><span class="icon">&#x1F392;</span><h2>Inventory</h2></div>
+        <div class="panel-body">
+            <div class="inventory-grid">
+                <div class="inventory-slot">
+                    <div class="item-icon">&#x1F310;</div>
+                    <span class="item-rarity rarity-legendary">Legendary</span>
+                    <div class="item-name">Project Phoenix</div>
+                    <div class="item-desc">A full-stack web application that rose from the ashes of legacy systems. Handles 10K requests/sec with zero downtime.</div>
+                    <div class="item-stats"><span class="item-stat">+500 XP</span><span class="item-stat">+100 Gold</span></div>
+                </div>
+                <div class="inventory-slot">
+                    <div class="item-icon">&#x1F916;</div>
+                    <span class="item-rarity rarity-epic">Epic</span>
+                    <div class="item-name">AI Chat Companion</div>
+                    <div class="item-desc">An intelligent chatbot powered by machine learning. Understands context and remembers past conversations.</div>
+                    <div class="item-stats"><span class="item-stat">+350 XP</span><span class="item-stat">+75 Gold</span></div>
+                </div>
+                <div class="inventory-slot">
+                    <div class="item-icon">&#x1F4F1;</div>
+                    <span class="item-rarity rarity-rare">Rare</span>
+                    <div class="item-name">Mobile Quest App</div>
+                    <div class="item-desc">Cross-platform mobile app with offline support. Downloaded by 50K+ adventurers worldwide.</div>
+                    <div class="item-stats"><span class="item-stat">+250 XP</span><span class="item-stat">+50 Gold</span></div>
+                </div>
+                <div class="inventory-slot">
+                    <div class="item-icon">&#x2699;&#xFE0F;</div>
+                    <span class="item-rarity rarity-epic">Epic</span>
+                    <div class="item-name">CI/CD Forge</div>
+                    <div class="item-desc">Automated deployment pipeline that reduced release time from days to minutes. Built with GitHub Actions and Docker.</div>
+                    <div class="item-stats"><span class="item-stat">+300 XP</span><span class="item-stat">+60 Gold</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="panel" id="panel6">
+        <div class="panel-header"><span class="icon">&#x1F3C6;</span><h2>Achievements Unlocked</h2></div>
+        <div class="panel-body">
+            <div class="achievement-grid">
+                <div class="achievement"><div class="achievement-icon">&#x1F41B;</div><div class="achievement-info"><div class="achievement-name">Bug Slayer</div><div class="achievement-desc">Fixed 1000+ bugs without breaking production</div></div></div>
+                <div class="achievement"><div class="achievement-icon">&#x1F319;</div><div class="achievement-info"><div class="achievement-name">Night Coder</div><div class="achievement-desc">Pushed code at 3AM on a Saturday</div></div></div>
+                <div class="achievement"><div class="achievement-icon">&#x1F525;</div><div class="achievement-info"><div class="achievement-name">Hot Streak</div><div class="achievement-desc">365-day GitHub contribution streak</div></div></div>
+                <div class="achievement"><div class="achievement-icon">&#x1F4DA;</div><div class="achievement-info"><div class="achievement-name">Knowledge Seeker</div><div class="achievement-desc">Read 100+ technical books and articles</div></div></div>
+                <div class="achievement"><div class="achievement-icon">&#x1F91D;</div><div class="achievement-info"><div class="achievement-name">Open Source Hero</div><div class="achievement-desc">Contributed to 10+ open source projects</div></div></div>
+                <div class="achievement"><div class="achievement-icon">&#x2615;</div><div class="achievement-info"><div class="achievement-name">Caffeine Powered</div><div class="achievement-desc">Consumed 9999 cups of coffee while coding</div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="panel" id="panel7">
+        <div class="panel-header"><span class="icon">&#x1F300;</span><h2>Teleport Gate</h2></div>
+        <div class="panel-body">
+            <div style="text-align:center;margin-bottom:20px"><div class="dialogue-text" style="font-size:1.2rem;color:#888">Choose your portal to reach Larry Lai in other realms...</div></div>
+            <div class="teleport-links">
+                <a href="mailto:your@email.com" class="teleport-btn"><span class="btn-icon">&#x1F4E7;</span><span>EMAIL</span></a>
+                <a href="https://github.com/yourusername" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F419;</span><span>GITHUB</span></a>
+                <a href="https://linkedin.com/in/yourusername" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F4BC;</span><span>LINKEDIN</span></a>
+                <a href="https://twitter.com/yourusername" class="teleport-btn" target="_blank"><span class="btn-icon">&#x1F426;</span><span>TWITTER</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="game-footer">
+        <div class="footer-text">
+            <div>MADE WITH <span class="heart">&#x2764;</span> AND LOTS OF &#x2615;</div>
+            <div style="margin-top:8px">&copy; 2024 LARRY LAI | ALL RIGHTS RESERVED</div>
+            <div style="margin-top:8px;color:#333">NO BUGS WERE HARMED IN THE MAKING OF THIS WEBSITE</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+(function(){
+    var bar=document.getElementById('loadingBar'),pct=document.getElementById('loadingPercent'),scr=document.getElementById('loadingScreen'),progress=0;
+    var iv=setInterval(function(){progress+=Math.random()*15+5;if(progress>=100){progress=100;clearInterval(iv);setTimeout(function(){scr.classList.add('hidden');initAnimations()},400)}bar.style.width=progress+'%';pct.textContent=Math.floor(progress)+'%'},200);
+})();
+
+(function(){
+    var c=document.getElementById('starfield'),ctx=c.getContext('2d'),stars=[];
+    function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
+    function create(){stars=[];var n=Math.floor((c.width*c.height)/5000);for(var i=0;i<n;i++)stars.push({x:Math.random()*c.width,y:Math.random()*c.height,size:Math.random()*2+0.5,speed:Math.random()*0.5+0.1,opacity:Math.random()})}
+    function draw(){ctx.clearRect(0,0,c.width,c.height);stars.forEach(function(s){s.opacity+=(Math.random()-0.5)*0.02;s.opacity=Math.max(0.1,Math.min(1,s.opacity));ctx.fillStyle='rgba(255,255,255,'+s.opacity+')';ctx.fillRect(s.x,s.y,s.size,s.size);s.y-=s.speed;if(s.y<-5){s.y=c.height+5;s.x=Math.random()*c.width}});requestAnimationFrame(draw)}
+    resize();create();draw();window.addEventListener('resize',function(){resize();create()});
+})();
+
+function initAnimations(){
+    var el=document.getElementById('dialogueText');
+    var text="Welcome, brave traveler! You have stumbled upon the domain of <span class='highlight'>Larry Lai</span>, a Full-Stack Wizard who codes by day and debugs by night. Explore the panels below to discover his stats, skills, and legendary quests... &#x1F5FA;&#xFE0F;";
+    var i=0;
+    function type(){if(i<text.length){if(text[i]==='<'){var ci=text.indexOf('>',i);el.innerHTML+=text.substring(i,ci+1);i=ci+1}else{el.innerHTML+=text[i];i++}setTimeout(type,25)}}
+    type();
+
+    var panels=document.querySelectorAll('.panel');
+    var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-width]').forEach(function(b){setTimeout(function(){b.style.width=b.dataset.width+'%'},300)})}})},{threshold:0.1});
+    panels.forEach(function(p){obs.observe(p)});
+
+    var emojis=['\u2728','\u2B50','\uD83D\uDCAB','\uD83C\uDF1F','\u2694\uFE0F','\u1F6E1\uFE0F','\u1F9EA','\uDCL8\u48'];
+    function spawn(){var d=document.createElement('div');d.className='particle';d.textContent=emojis[Math.floor(Math.random()*emojis.length)];d.style.left=Math.random()*100+'vw';d.style.animationDuration=(Math.random()*10+10)+'s';document.body.appendChild(d);setTimeout(function(){d.remove()},20000)}
+    setInterval(spawn,3000);
+}
+
+(function(){
+    var code=[38,38,40,40,37,39,37,39,66,65],idx=0;
+    document.addEventListener('keydown',function(e){if(e.keyCode===code[idx]){idx++;if(idx===code.length){var s=document.createElement('style');s.textContent='@keyframes rainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}body{animation:rainbow 2s linear}';document.head.appendChild(s);idx=0}}else{idx=0}});
+})();
+</script>
+
+</body>
+</html>
