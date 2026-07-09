@@ -334,38 +334,151 @@
 </div>
 
 <script>
-(function(){
-    var bar=document.getElementById('loadingBar'),pct=document.getElementById('loadingPercent'),scr=document.getElementById('loadingScreen'),progress=0;
-    var iv=setInterval(function(){progress+=Math.random()*15+5;if(progress>=100){progress=100;clearInterval(iv);setTimeout(function(){scr.classList.add('hidden');initAnimations()},400)}bar.style.width=progress+'%';pct.textContent=Math.floor(progress)+'%'},200);
+// Loading Screen
+(function() {
+    var bar = document.getElementById('loadingBar');
+    var pct = document.getElementById('loadingPercent');
+    var scr = document.getElementById('loadingScreen');
+    var progress = 0;
+
+    var iv = setInterval(function() {
+        progress += Math.random() * 15 + 5;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(iv);
+            setTimeout(function() {
+                scr.classList.add('hidden');
+                initAnimations();
+            }, 400);
+        }
+        bar.style.width = progress + '%';
+        pct.textContent = Math.floor(progress) + '%';
+    }, 200);
 })();
 
-(function(){
-    var c=document.getElementById('starfield'),ctx=c.getContext('2d'),stars=[];
-    function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
-    function create(){stars=[];var n=Math.floor((c.width*c.height)/5000);for(var i=0;i<n;i++)stars.push({x:Math.random()*c.width,y:Math.random()*c.height,size:Math.random()*2+0.5,speed:Math.random()*0.5+0.1,opacity:Math.random()})}
-    function draw(){ctx.clearRect(0,0,c.width,c.height);stars.forEach(function(s){s.opacity+=(Math.random()-0.5)*0.02;s.opacity=Math.max(0.1,Math.min(1,s.opacity));ctx.fillStyle='rgba(255,255,255,'+s.opacity+')';ctx.fillRect(s.x,s.y,s.size,s.size);s.y-=s.speed;if(s.y<-5){s.y=c.height+5;s.x=Math.random()*c.width}});requestAnimationFrame(draw)}
-    resize();create();draw();window.addEventListener('resize',function(){resize();create()});
+// Starfield Background
+(function() {
+    var c = document.getElementById('starfield');
+    var ctx = c.getContext('2d');
+    var stars = [];
+
+    function resize() {
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+    }
+
+    function create() {
+        stars = [];
+        var n = Math.floor((c.width * c.height) / 5000);
+        for (var i = 0; i < n; i++) {
+            stars.push({
+                x: Math.random() * c.width,
+                y: Math.random() * c.height,
+                size: Math.random() * 2 + 0.5,
+                speed: Math.random() * 0.5 + 0.1,
+                opacity: Math.random()
+            });
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        stars.forEach(function(s) {
+            s.opacity += (Math.random() - 0.5) * 0.02;
+            s.opacity = Math.max(0.1, Math.min(1, s.opacity));
+            ctx.fillStyle = 'rgba(255, 255, 255, ' + s.opacity + ')';
+            ctx.fillRect(s.x, s.y, s.size, s.size);
+            s.y -= s.speed;
+            if (s.y < -5) {
+                s.y = c.height + 5;
+                s.x = Math.random() * c.width;
+            }
+        });
+        requestAnimationFrame(draw);
+    }
+
+    resize();
+    create();
+    draw();
+    window.addEventListener('resize', function() {
+        resize();
+        create();
+    });
 })();
 
-function initAnimations(){
-    var el=document.getElementById('dialogueText');
-    var text="Welcome, brave traveler! You have stumbled upon the domain of <span class='highlight'>Larry Lai</span>, a Full-Stack Wizard who codes by day and debugs by night. Explore the panels below to discover his stats, skills, and legendary quests... &#x1F5FA;&#xFE0F;";
-    var i=0;
-    function type(){if(i<text.length){if(text[i]==='<'){var ci=text.indexOf('>',i);el.innerHTML+=text.substring(i,ci+1);i=ci+1}else{el.innerHTML+=text[i];i++}setTimeout(type,25)}}
+// Main Animations
+function initAnimations() {
+    // Dialogue Typewriter
+    var el = document.getElementById('dialogueText');
+    var text = "Welcome, brave traveler! You have stumbled upon the domain of <span class='highlight'>Larry Lai</span>, a Full-Stack Wizard who codes by day and debugs by night. Explore the panels below to discover his stats, skills, and legendary quests... \uD83D\uDDFA\uFE0F";
+    var i = 0;
+
+    function type() {
+        if (i < text.length) {
+            if (text[i] === '<') {
+                var ci = text.indexOf('>', i);
+                el.innerHTML += text.substring(i, ci + 1);
+                i = ci + 1;
+            } else {
+                el.innerHTML += text[i];
+                i++;
+            }
+            setTimeout(type, 25);
+        }
+    }
     type();
 
-    var panels=document.querySelectorAll('.panel');
-    var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-width]').forEach(function(b){setTimeout(function(){b.style.width=b.dataset.width+'%'},300)})}})},{threshold:0.1});
-    panels.forEach(function(p){obs.observe(p)});
+    // Panel Scroll Animations
+    var panels = document.querySelectorAll('.panel');
+    var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                e.target.querySelectorAll('[data-width]').forEach(function(b) {
+                    setTimeout(function() {
+                        b.style.width = b.dataset.width + '%';
+                    }, 300);
+                });
+            }
+        });
+    }, { threshold: 0.1 });
+    panels.forEach(function(p) {
+        obs.observe(p);
+    });
 
-    var emojis=['\u2728','\u2B50','\uD83D\uDCAB','\uD83C\uDF1F','\u2694\uFE0F','\u1F6E1\uFE0F','\u1F9EA','\uDCL8\u48'];
-    function spawn(){var d=document.createElement('div');d.className='particle';d.textContent=emojis[Math.floor(Math.random()*emojis.length)];d.style.left=Math.random()*100+'vw';d.style.animationDuration=(Math.random()*10+10)+'s';document.body.appendChild(d);setTimeout(function(){d.remove()},20000)}
-    setInterval(spawn,3000);
+    // Floating Particles
+    var emojis = ['\u2728', '\u2B50', '\uD83D\uDCAB', '\uD83C\uDF1F', '\u2694\uFE0F', '\u1F6E1\uFE0F', '\u1F9EA', '\uD83D\uDC8E'];
+    function spawn() {
+        var d = document.createElement('div');
+        d.className = 'particle';
+        d.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        d.style.left = Math.random() * 100 + 'vw';
+        d.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        document.body.appendChild(d);
+        setTimeout(function() {
+            d.remove();
+        }, 20000);
+    }
+    setInterval(spawn, 3000);
 }
 
-(function(){
-    var code=[38,38,40,40,37,39,37,39,66,65],idx=0;
-    document.addEventListener('keydown',function(e){if(e.keyCode===code[idx]){idx++;if(idx===code.length){var s=document.createElement('style');s.textContent='@keyframes rainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}body{animation:rainbow 2s linear}';document.head.appendChild(s);idx=0}}else{idx=0}});
+// Konami Code Easter Egg
+(function() {
+    var code = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    var idx = 0;
+    document.addEventListener('keydown', function(e) {
+        if (e.keyCode === code[idx]) {
+            idx++;
+            if (idx === code.length) {
+                var s = document.createElement('style');
+                s.textContent = '@keyframes rainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}body{animation:rainbow 2s linear}';
+                document.head.appendChild(s);
+                idx = 0;
+            }
+        } else {
+            idx = 0;
+        }
+    });
 })();
 </script>
 
