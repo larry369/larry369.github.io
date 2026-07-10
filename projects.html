@@ -4,96 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects | Larry Lai</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{--bg:#fff;--text:#202124;--text2:#5f6368;--blue:#4285f4;--border:#e8eaed;--card:#fff;--hover:#f8f9fa}
-        [data-theme="dark"]{--bg:#1a1a1a;--text:#e8eaed;--text2:#9aa0a6;--border:#3c4043;--card:#2d2d2d;--hover:#383838}
-        body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans TC',sans-serif;transition:background 0.3s,color 0.3s}
-        .page-wrap{animation:fadeUp 0.5s ease}
-        .page-exit{animation:fadeOut 0.3s ease forwards}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes fadeOut{from{opacity:1}to{opacity:0}}
-        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 32px}
-        .nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
-        .nav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:600;font-size:1.1rem}
-        .nav-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--blue)}
-        .nav-links{display:flex;gap:24px;align-items:center}
-        .nav-links a{color:var(--text2);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s}
-        .nav-links a:hover{color:var(--blue)}
-        .theme-toggle{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-        .theme-toggle:hover{background:var(--hover)}
-        .content{padding:120px 32px 60px;max-width:1200px;margin:0 auto}
-        h1{font-size:2rem;font-weight:800;margin-bottom:8px}
-        .subtitle{color:var(--text2);font-size:0.95rem;margin-bottom:40px}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
-        .card{padding:28px;border-radius:16px;border:1px solid var(--border);transition:all 0.3s;text-decoration:none;color:var(--text);display:flex;flex-direction:column}
-        .card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 24px rgba(66,133,244,0.1)}
-        .card .tag{display:inline-block;padding:4px 12px;border-radius:980px;background:var(--hover);color:var(--blue);font-size:0.72rem;font-weight:600;margin-bottom:12px;border:1px solid var(--border)}
-        .card h3{font-size:1.1rem;font-weight:600;margin-bottom:8px}
-        .card p{font-size:0.88rem;color:var(--text2);line-height:1.6;flex:1}
-        .card .sections{margin-top:16px;display:flex;flex-wrap:wrap;gap:4px}
-        .card .sec-tag{font-size:0.7rem;padding:3px 8px;border-radius:980px;background:var(--hover);color:var(--text2)}
-        .card .arrow{margin-top:16px;color:var(--blue);font-size:0.85rem;font-weight:500;transition:transform 0.2s}
-        .card:hover .arrow{transform:translateX(4px)}
-        .footer{text-align:center;padding:40px 32px;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:0.82rem}
-        .reveal{opacity:0;transform:translateY(20px);transition:all 0.5s ease}
+        :root{--bg:#fafafa;--text:#111;--text2:#555;--text3:#999;--accent:#2563eb;--accent2:#7c3aed;--accent3:#06b6d4;--card:rgba(255,255,255,0.7);--card-border:rgba(0,0,0,0.06);--glass:rgba(255,255,255,0.5)}
+        [data-theme="dark"]{--bg:#0a0a0f;--text:#f0f0f5;--text2:#aaa;--text3:#666;--accent:#60a5fa;--accent2:#a78bfa;--accent3:#22d3ee;--card:rgba(255,255,255,0.04);--card-border:rgba(255,255,255,0.08);--glass:rgba(255,255,255,0.03)}
+        body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans TC',sans-serif;transition:background 0.5s,color 0.5s;overflow-x:hidden}
+        .orbs{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+        .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;animation:orbFloat 20s ease-in-out infinite}
+        .orb-1{width:500px;height:500px;background:#2563eb;top:-10%;left:-5%}
+        .orb-2{width:400px;height:400px;background:#7c3aed;bottom:-10%;right:-5%;animation-delay:-7s}
+        .orb-3{width:350px;height:350px;background:#06b6d4;top:40%;left:50%;animation-delay:-14s}
+        [data-theme="dark"] .orb{opacity:0.15}
+        @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-40px) scale(1.1)}50%{transform:translate(-20px,30px) scale(0.95)}75%{transform:translate(40px,20px) scale(1.05)}}
+        .page-wrap{position:relative;z-index:1;animation:pageIn 0.6s cubic-bezier(0.16,1,0.3,1)}
+        .page-exit{animation:pageOut 0.3s ease forwards}
+        @keyframes pageIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes pageOut{to{opacity:0;transform:translateY(-12px)}}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;padding:0 32px;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--card-border)}
+        .nav-inner{max-width:1100px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+        .nav-brand{text-decoration:none;font-weight:700;font-size:1rem;color:var(--text);display:flex;align-items:center;gap:8px}
+        .nav-brand svg{width:28px;height:28px}
+        .nav-links{display:flex;gap:6px;align-items:center}
+        .nav-links a{color:var(--text2);text-decoration:none;font-size:0.85rem;font-weight:500;padding:6px 14px;border-radius:980px;transition:all 0.2s}
+        .nav-links a:hover{color:var(--accent)}
+        .theme-toggle{width:36px;height:36px;border-radius:50%;border:1px solid var(--card-border);background:var(--card);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+        .theme-toggle:hover{transform:rotate(30deg) scale(1.1)}
+        .content{padding:120px 32px 60px;max-width:1100px;margin:0 auto}
+        .page-title{font-size:clamp(2rem,4vw,2.8rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:8px}
+        .page-sub{color:var(--text2);font-size:0.95rem;margin-bottom:40px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+        .card{padding:28px;border-radius:20px;background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(12px);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);text-decoration:none;color:var(--text);display:flex;flex-direction:column;position:relative;overflow:hidden}
+        .card::after{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(37,99,235,0.05),rgba(124,58,237,0.05));opacity:0;transition:opacity 0.3s}
+        .card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 12px 40px rgba(37,99,235,0.08)}
+        .card:hover::after{opacity:1}
+        .card .tag{display:inline-block;padding:4px 12px;border-radius:980px;background:rgba(37,99,235,0.08);color:var(--accent);font-size:0.72rem;font-weight:600;margin-bottom:14px;position:relative;z-index:1;width:fit-content}
+        .card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;position:relative;z-index:1}
+        .card p{font-size:0.88rem;color:var(--text2);line-height:1.6;flex:1;position:relative;z-index:1}
+        .card .sections{margin-top:16px;display:flex;flex-wrap:wrap;gap:5px;position:relative;z-index:1}
+        .card .sec-tag{font-size:0.7rem;padding:4px 10px;border-radius:980px;background:var(--bg);color:var(--text2);border:1px solid var(--card-border)}
+        .card .arrow{margin-top:16px;color:var(--accent);font-size:0.82rem;font-weight:600;transition:gap 0.3s;display:inline-flex;align-items:center;gap:4px;position:relative;z-index:1}
+        .card:hover .arrow{gap:8px}
+        .footer{text-align:center;padding:40px 32px;color:var(--text3);font-size:0.78rem}
+        .reveal{opacity:0;transform:translateY(20px);transition:all 0.6s cubic-bezier(0.16,1,0.3,1)}
         .reveal.visible{opacity:1;transform:translateY(0)}
-        .ripple{position:fixed;pointer-events:none;border-radius:50%;background:rgba(66,133,244,0.15);animation:rippleOut 0.6s ease-out forwards;z-index:9999}
-        @keyframes rippleOut{0%{width:0;height:0;opacity:1}100%{width:80px;height:80px;opacity:0}}
-        @media(max-width:768px){.nav{padding:0 16px}.content{padding:100px 16px 40px}.grid{grid-template-columns:1fr}}
+        .ripple{position:fixed;pointer-events:none;border-radius:50%;border:2px solid var(--accent);animation:rippleOut 0.6s ease-out forwards;z-index:9999}
+        @keyframes rippleOut{0%{width:0;height:0;opacity:0.6}100%{width:60px;height:60px;opacity:0}}
+        @media(max-width:768px){.nav{padding:0 16px}.nav-links{display:none}.content{padding:100px 16px 40px}.grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
+<div class="orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 <div class="page-wrap" id="pageWrap">
 <nav class="nav"><div class="nav-inner">
-    <a href="../index.html" class="nav-brand" onclick="return pageNav(event,this)"><span class="dot"></span>Larry Lai</a>
+    <a href="../index.html" class="nav-brand" onclick="return pageNav(event,this)">
+        <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="url(#g1)"/><path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs></svg>
+        Larry Lai
+    </a>
     <div class="nav-links"><a href="../index.html" onclick="return pageNav(event,this)">Home</a><a href="projects.html">Projects</a></div>
     <button class="theme-toggle" id="themeBtn">&#x1F319;</button>
 </div></nav>
 <div class="content">
-    <h1 class="reveal">All Projects</h1>
-    <p class="subtitle reveal">A collection of my work across ERP, MES, and supply chain systems.</p>
+    <h1 class="page-title reveal">All Projects</h1>
+    <p class="page-sub reveal">A collection of my work across ERP, MES, and supply chain systems.</p>
     <div class="grid">
         <a href="projects/warehouse.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">ERP</span><h3>&#x1F4E6; 一般/立體倉庫管理</h3>
-            <p>管理倉庫、托盤、儲格，串接ERP實現立體倉儲自動化管理。</p>
+            <p>串接ERP，實現倉庫、托盤、儲格的完整管理流程。</p>
             <div class="sections"><span class="sec-tag">倉庫列表</span><span class="sec-tag">新增倉庫</span><span class="sec-tag">倉庫內容</span><span class="sec-tag">托盤管理</span><span class="sec-tag">儲格內容</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
         <a href="projects/review.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">Module</span><h3>&#x1F50D; 自審核模組</h3>
-            <p>自定義審批流程，支持多層級審核與流程追蹤。</p>
+            <p>自定義審批流程，支援多層級審核與狀態追蹤。</p>
             <div class="sections"><span class="sec-tag">自定義流程</span><span class="sec-tag">選擇送審</span><span class="sec-tag">審核狀態</span><span class="sec-tag">核准駁回</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
         <a href="projects/factory.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">Module</span><h3>&#x1F3ED; 廠務部功能模組</h3>
-            <p>詢價單、請購單、採購單、進貨單、入庫單、領料單完整業務流程。</p>
+            <p>詢價單、請購單、採購單、進貨單等完整業務流程。</p>
             <div class="sections"><span class="sec-tag">詢價單</span><span class="sec-tag">請購單</span><span class="sec-tag">採購單</span><span class="sec-tag">進貨單</span><span class="sec-tag">入庫單</span><span class="sec-tag">領料單</span><span class="sec-tag">物料查詢</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
         <a href="projects/kanban.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">MES</span><h3>&#x1F4CA; 看板系統</h3>
-            <p>RFID 即時監控設備工件進度與站點資訊，追蹤生產狀態。</p>
+            <p>RFID 即時監控設備工件進度與站點資訊。</p>
             <div class="sections"><span class="sec-tag">站點資訊</span><span class="sec-tag">進站感應</span><span class="sec-tag">工件進度</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
         <a href="projects/mes.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">Framework</span><h3>&#x1F9EA; MES 前端框架</h3>
-            <p>自製 MES 系統前端框架，支援多國語系與模組化功能選單。</p>
+            <p>自製 MES 系統前端框架，多國語系與模組化選單。</p>
             <div class="sections"><span class="sec-tag">前端框架</span><span class="sec-tag">多國語系</span><span class="sec-tag">功能選單</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
         <a href="projects/dataFoundation.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">Integration</span><h3>&#x1F517; 資料介接</h3>
-            <p>MES 資料基礎建設，提供工廠生產資料給高階主管與BI單位。</p>
+            <p>MES 資料基礎建設，API 監控與 BI 串接。</p>
             <div class="sections"><span class="sec-tag">監控UI</span><span class="sec-tag">API狀況</span><span class="sec-tag">JSON傳遞</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
         <a href="projects/autoPush.html" class="card reveal" onclick="return pageNav(event,this)">
             <span class="tag">Tool</span><h3>&#x2601;&#xFE0F; 自動上傳程式</h3>
-            <p>SVN 轉 GitLab 自動化遷移工具，處理近百支程式。</p>
+            <p>SVN 轉 GitLab 自動化遷移工具。</p>
             <div class="sections"><span class="sec-tag">自動化</span><span class="sec-tag">版本管理</span></div>
             <span class="arrow">View Details &rarr;</span>
         </a>
@@ -107,7 +120,7 @@ btn.addEventListener('click',function(){dark=!dark;document.documentElement.setA
 var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
 function pageNav(e,el){e.preventDefault();var w=document.getElementById('pageWrap');w.classList.add('page-exit');setTimeout(function(){window.location.href=el.href},300);return false}
-document.addEventListener('click',function(e){var r=document.createElement('div');r.className='ripple';r.style.left=(e.clientX-40)+'px';r.style.top=(e.clientY-40)+'px';document.body.appendChild(r);setTimeout(function(){r.remove()},600)});
+document.addEventListener('click',function(e){var r=document.createElement('div');r.className='ripple';r.style.left=(e.clientX-30)+'px';r.style.top=(e.clientY-30)+'px';document.body.appendChild(r);setTimeout(function(){r.remove()},600)});
 </script>
 </body>
 </html>
