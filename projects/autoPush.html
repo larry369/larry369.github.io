@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自動上傳程式 | Larry Lai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="page-wrap" id="pageWrap">
+<nav class="nav"><div class="nav-inner">
+    <a href="../index.html" class="nav-brand" onclick="return pageNav(event,this)"><span class="dot"></span>Larry Lai</a>
+    <div class="nav-links">
+        <a href="../projects.html" onclick="return pageNav(event,this)">&larr; Projects</a>
+        <span class="nav-proj-title">自動上傳程式</span>
+    </div>
+</div></nav>
+<div class="content">
+    <div class="proj-hero reveal">
+        <span class="proj-tag">Tool</span>
+        <h1>&#x2601;&#xFE0F; 自動上傳程式</h1>
+        <p>SVN 轉 GitLab 自動化遷移工具，處理近百支程式。</p>
+    </div>
+
+    <div class="proj-section reveal">
+        <p style="color:var(--text2);font-size:0.95rem;margin-bottom:24px">
+            由於MES系統版本眾多，每個案子大約有近百支程式需要維護。為了提升版本管理效率，開發了自動上傳工具，將SVN上的程式自動遷移至GitLab，並保持版本歷史紀錄。
+        </p>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">01</span><h3>自動上傳程式</h3></div>
+        <p>自動掃描SVN指定目錄，批次將程式碼推送至GitLab對應的Repository。支援增量更新、衝突處理、版本映射等功能。</p>
+        <div class="placeholder-img"><div class="placeholder-text">自動上傳程式介面</div></div>
+    </div>
+</div>
+<footer class="footer">&copy; 2025 Larry Lai. All rights reserved.</footer>
+</div>
+<script src="../script.js"></script>
+</body>
+</html>

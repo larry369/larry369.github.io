@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>看板系統 | Larry Lai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="page-wrap" id="pageWrap">
+<nav class="nav"><div class="nav-inner">
+    <a href="../index.html" class="nav-brand" onclick="return pageNav(event,this)"><span class="dot"></span>Larry Lai</a>
+    <div class="nav-links">
+        <a href="../projects.html" onclick="return pageNav(event,this)">&larr; Projects</a>
+        <span class="nav-proj-title">看板系統</span>
+    </div>
+</div></nav>
+<div class="content">
+    <div class="proj-hero reveal">
+        <span class="proj-tag">MES</span>
+        <h1>&#x1F4CA; 看板系統</h1>
+        <p>RFID 即時監控設備工件進度與站點資訊，追蹤生產狀態。</p>
+    </div>
+
+    <div class="proj-section reveal">
+        <p style="color:var(--text2);font-size:0.95rem;margin-bottom:24px">
+            看板系統用於追蹤生產線上的工件數量。透過RFID感應器，在每個設備站點即時讀取工件通過狀態，並將資料上傳至看板顯示。管理者可即時掌握每個站點的工件數量與進度。
+        </p>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">01</span><h3>站點資訊</h3></div>
+        <p>顯示所有設備站點的即時狀態，包含站點名稱、當前工件數量、運行狀態等。</p>
+        <div class="placeholder-img"><div class="placeholder-text">站點資訊看板</div></div>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">02</span><h3>進站感應</h3></div>
+        <p>RFID感應器偵測工件通過時，自動更新站點計數並推送至看板顯示。</p>
+        <div class="placeholder-img"><div class="placeholder-text">進站感應畫面</div></div>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">03</span><h3>工件總進度</h3></div>
+        <p>彙整所有站點的工件數量，顯示整體生產進度與達成率。</p>
+        <div class="placeholder-img"><div class="placeholder-text">工件總進度看板</div></div>
+    </div>
+</div>
+<footer class="footer">&copy; 2025 Larry Lai. All rights reserved.</footer>
+</div>
+<script src="../script.js"></script>
+</body>
+</html>

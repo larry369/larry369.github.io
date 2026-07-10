@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Larry Lai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#fff;--text:#202124;--text2:#5f6368;--blue:#4285f4;--border:#e8eaed;--card:#fff;--hover:#f8f9fa}
+        [data-theme="dark"]{--bg:#1a1a1a;--text:#e8eaed;--text2:#9aa0a6;--border:#3c4043;--card:#2d2d2d;--hover:#383838}
+        body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans TC',sans-serif;transition:background 0.3s,color 0.3s}
+        .page-wrap{animation:fadeUp 0.5s ease}
+        .page-exit{animation:fadeOut 0.3s ease forwards}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeOut{from{opacity:1}to{opacity:0}}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 32px}
+        .nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+        .nav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:600;font-size:1.1rem}
+        .nav-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--blue)}
+        .nav-links{display:flex;gap:24px;align-items:center}
+        .nav-links a{color:var(--text2);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s}
+        .nav-links a:hover{color:var(--blue)}
+        .theme-toggle{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+        .theme-toggle:hover{background:var(--hover)}
+        .content{padding:120px 32px 60px;max-width:1200px;margin:0 auto}
+        h1{font-size:2rem;font-weight:800;margin-bottom:8px}
+        .subtitle{color:var(--text2);font-size:0.95rem;margin-bottom:40px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+        .card{padding:28px;border-radius:16px;border:1px solid var(--border);transition:all 0.3s;text-decoration:none;color:var(--text);display:flex;flex-direction:column}
+        .card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 24px rgba(66,133,244,0.1)}
+        .card .tag{display:inline-block;padding:4px 12px;border-radius:980px;background:var(--hover);color:var(--blue);font-size:0.72rem;font-weight:600;margin-bottom:12px;border:1px solid var(--border)}
+        .card h3{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+        .card p{font-size:0.88rem;color:var(--text2);line-height:1.6;flex:1}
+        .card .sections{margin-top:16px;display:flex;flex-wrap:wrap;gap:4px}
+        .card .sec-tag{font-size:0.7rem;padding:3px 8px;border-radius:980px;background:var(--hover);color:var(--text2)}
+        .card .arrow{margin-top:16px;color:var(--blue);font-size:0.85rem;font-weight:500;transition:transform 0.2s}
+        .card:hover .arrow{transform:translateX(4px)}
+        .footer{text-align:center;padding:40px 32px;border-top:1px solid var(--border);margin-top:40px;color:var(--text2);font-size:0.82rem}
+        .reveal{opacity:0;transform:translateY(20px);transition:all 0.5s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .ripple{position:fixed;pointer-events:none;border-radius:50%;background:rgba(66,133,244,0.15);animation:rippleOut 0.6s ease-out forwards;z-index:9999}
+        @keyframes rippleOut{0%{width:0;height:0;opacity:1}100%{width:80px;height:80px;opacity:0}}
+        @media(max-width:768px){.nav{padding:0 16px}.content{padding:100px 16px 40px}.grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+<div class="page-wrap" id="pageWrap">
+<nav class="nav"><div class="nav-inner">
+    <a href="../index.html" class="nav-brand" onclick="return pageNav(event,this)"><span class="dot"></span>Larry Lai</a>
+    <div class="nav-links"><a href="../index.html" onclick="return pageNav(event,this)">Home</a><a href="projects.html">Projects</a></div>
+    <button class="theme-toggle" id="themeBtn">&#x1F319;</button>
+</div></nav>
+<div class="content">
+    <h1 class="reveal">All Projects</h1>
+    <p class="subtitle reveal">A collection of my work across ERP, MES, and supply chain systems.</p>
+    <div class="grid">
+        <a href="projects/warehouse.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">ERP</span><h3>&#x1F4E6; 一般/立體倉庫管理</h3>
+            <p>管理倉庫、托盤、儲格，串接ERP實現立體倉儲自動化管理。</p>
+            <div class="sections"><span class="sec-tag">倉庫列表</span><span class="sec-tag">新增倉庫</span><span class="sec-tag">倉庫內容</span><span class="sec-tag">托盤管理</span><span class="sec-tag">儲格內容</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+        <a href="projects/review.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">Module</span><h3>&#x1F50D; 自審核模組</h3>
+            <p>自定義審批流程，支持多層級審核與流程追蹤。</p>
+            <div class="sections"><span class="sec-tag">自定義流程</span><span class="sec-tag">選擇送審</span><span class="sec-tag">審核狀態</span><span class="sec-tag">核准駁回</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+        <a href="projects/factory.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">Module</span><h3>&#x1F3ED; 廠務部功能模組</h3>
+            <p>詢價單、請購單、採購單、進貨單、入庫單、領料單完整業務流程。</p>
+            <div class="sections"><span class="sec-tag">詢價單</span><span class="sec-tag">請購單</span><span class="sec-tag">採購單</span><span class="sec-tag">進貨單</span><span class="sec-tag">入庫單</span><span class="sec-tag">領料單</span><span class="sec-tag">物料查詢</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+        <a href="projects/kanban.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">MES</span><h3>&#x1F4CA; 看板系統</h3>
+            <p>RFID 即時監控設備工件進度與站點資訊，追蹤生產狀態。</p>
+            <div class="sections"><span class="sec-tag">站點資訊</span><span class="sec-tag">進站感應</span><span class="sec-tag">工件進度</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+        <a href="projects/mes.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">Framework</span><h3>&#x1F9EA; MES 前端框架</h3>
+            <p>自製 MES 系統前端框架，支援多國語系與模組化功能選單。</p>
+            <div class="sections"><span class="sec-tag">前端框架</span><span class="sec-tag">多國語系</span><span class="sec-tag">功能選單</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+        <a href="projects/dataFoundation.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">Integration</span><h3>&#x1F517; 資料介接</h3>
+            <p>MES 資料基礎建設，提供工廠生產資料給高階主管與BI單位。</p>
+            <div class="sections"><span class="sec-tag">監控UI</span><span class="sec-tag">API狀況</span><span class="sec-tag">JSON傳遞</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+        <a href="projects/autoPush.html" class="card reveal" onclick="return pageNav(event,this)">
+            <span class="tag">Tool</span><h3>&#x2601;&#xFE0F; 自動上傳程式</h3>
+            <p>SVN 轉 GitLab 自動化遷移工具，處理近百支程式。</p>
+            <div class="sections"><span class="sec-tag">自動化</span><span class="sec-tag">版本管理</span></div>
+            <span class="arrow">View Details &rarr;</span>
+        </a>
+    </div>
+</div>
+<footer class="footer">&copy; 2025 Larry Lai. All rights reserved.</footer>
+</div>
+<script>
+var btn=document.getElementById('themeBtn'),dark=false;
+btn.addEventListener('click',function(){dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'');btn.innerHTML=dark?'\u2600\uFE0F':'\uD83C\uDF19'});
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+function pageNav(e,el){e.preventDefault();var w=document.getElementById('pageWrap');w.classList.add('page-exit');setTimeout(function(){window.location.href=el.href},300);return false}
+document.addEventListener('click',function(e){var r=document.createElement('div');r.className='ripple';r.style.left=(e.clientX-40)+'px';r.style.top=(e.clientY-40)+'px';document.body.appendChild(r);setTimeout(function(){r.remove()},600)});
+</script>
+</body>
+</html>

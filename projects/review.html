@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自審核模組 | Larry Lai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="page-wrap" id="pageWrap">
+<nav class="nav"><div class="nav-inner">
+    <a href="../index.html" class="nav-brand" onclick="return pageNav(event,this)"><span class="dot"></span>Larry Lai</a>
+    <div class="nav-links">
+        <a href="../projects.html" onclick="return pageNav(event,this)">&larr; Projects</a>
+        <span class="nav-proj-title">自審核模組</span>
+    </div>
+</div></nav>
+<div class="content">
+    <div class="proj-hero reveal">
+        <span class="proj-tag">Module</span>
+        <h1>&#x1F50D; 自審核模組</h1>
+        <p>自定義審批流程，支援多層級審核與流程狀態追蹤。</p>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">01</span><h3>自定義流程</h3></div>
+        <p>管理員可自行設定審批流程，包含審核節點、審核人員、通過條件等。支援多種流程模板。</p>
+        <div class="placeholder-img"><div class="placeholder-text">流程設定畫面</div></div>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">02</span><h3>選擇流程送審</h3></div>
+        <p>使用者提交文件時，選擇適合的審批流程進行送審。系統自動發送通知給下一位審核者。</p>
+        <div class="placeholder-img"><div class="placeholder-text">送審選擇介面</div></div>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">03</span><h3>審核與查看狀態</h3></div>
+        <p>即時顯示文件在審批流程中的位置，讓提交者與審核者都能掌握最新狀態。</p>
+        <div class="placeholder-img"><div class="placeholder-text">審核狀態追蹤</div></div>
+    </div>
+
+    <div class="proj-section reveal">
+        <div class="proj-section-header"><span class="num">04</span><h3>核准駁回與意見</h3></div>
+        <p>審核者可核准或駁回文件，並留下審核意見。駁回時自動退回給提交者修改。</p>
+        <div class="placeholder-img"><div class="placeholder-text">審核操作介面</div></div>
+    </div>
+</div>
+<footer class="footer">&copy; 2025 Larry Lai. All rights reserved.</footer>
+</div>
+<script src="../script.js"></script>
+</body>
+</html>
