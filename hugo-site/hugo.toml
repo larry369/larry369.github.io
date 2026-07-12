@@ -1,0 +1,53 @@
+baseURL = "https://larry369.github.io/"
+languageCode = "zh-tw"
+defaultContentLanguage = "zh"
+title = "Larry Lai | Software Engineer"
+theme = ""
+
+[params]
+  description = "Full-stack software engineer specializing in ERP, MES, and supply chain systems."
+  author = "Larry Lai"
+  dateFormat = "2006/01/02"
+  # Utterances config
+  utterancesRepo = "larry369/larry369.github.io"
+  utterancesTheme = "github-light"
+
+[params.social]
+  github = "https://github.com/larry369"
+  email = "larrylai0306@gmail.com"
+
+[menu]
+  [[menu.main]]
+    identifier = "blog"
+    name = "所有文章"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects/"
+    weight = 2
+  [[menu.main]]
+    identifier = "about"
+    name = "關於我"
+    url = "/about/"
+    weight = 3
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "dracula"
+    lineNos = false
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+[security.http]
+  methods = ["(?i)GET|POST"]
+  urls = [".*"]

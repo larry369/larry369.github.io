@@ -1,0 +1,23 @@
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="{{ .Site.BaseURL }}" class="nav-brand">
+            <img src="{{ "images/logo.png" | relURL }}" alt="Logo" class="nav-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+            <span class="nav-logo-fallback" style="display:none">{{ .Site.Params.author }}</span>
+            <span class="nav-text">{{ .Site.Params.author }}</span>
+        </a>
+        <div class="nav-links">
+            {{ range .Site.Menus.main }}
+            <a href="{{ .URL }}" {{ if $.IsMenuCurrent "main" . }}class="active"{{ end }}>{{ .Name }}</a>
+            {{ end }}
+        </div>
+        <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">&#x1F319;</button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+        {{ range .Site.Menus.main }}
+        <a href="{{ .URL }}">{{ .Name }}</a>
+        {{ end }}
+    </div>
+</nav>

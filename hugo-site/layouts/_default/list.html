@@ -1,0 +1,24 @@
+{{ define "main" }}
+<div class="post-list">
+    {{ .Content }}
+    {{ range .Paginator.Pages }}
+    <article class="post-card">
+        <div class="post-meta">
+            <time>{{ .Date.Format "2006/01/02" }}</time>
+            {{ with .Params.categories }}<span class="post-category">{{ index . 0 }}</span>{{ end }}
+        </div>
+        <h2 class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <p class="post-excerpt">{{ .Summary | plainify | truncate 160 }}</p>
+        <a href="{{ .RelPermalink }}" class="read-more">閱讀更多 &rarr;</a>
+    </article>
+    {{ end }}
+</div>
+
+{{ if gt .Paginator.TotalPages 1 }}
+<div class="pagination">
+    {{ if .Paginator.HasPrev }}<a href="{{ .Paginator.Prev.URL }}" class="page-link">&laquo; 上一頁</a>{{ end }}
+    <span class="page-current">{{ .Paginator.PageNumber }} / {{ .Paginator.TotalPages }}</span>
+    {{ if .Paginator.HasNext }}<a href="{{ .Paginator.Next.URL }}" class="page-link">下一頁 &raquo;</a>{{ end }}
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,45 @@
+{{ define "main" }}
+<article class="post">
+    <header class="post-header">
+        <div class="post-meta">
+            <time>{{ .Date.Format "2006/01/02" }}</time>
+            {{ with .Params.categories }}<span class="post-category">{{ index . 0 }}</span>{{ end }}
+        </div>
+        <h1 class="post-title">{{ .Title }}</h1>
+        {{ with .Params.description }}<p class="post-description">{{ . }}</p>{{ end }}
+    </header>
+
+    <div class="post-content">
+        {{ .Content }}
+    </div>
+
+    {{ with .Params.tags }}
+    <div class="post-tags">
+        {{ range . }}<a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="tag">#{{ . }}</a>{{ end }}
+    </div>
+    {{ end }}
+
+    <div class="post-nav">
+        {{ with .PrevInSection }}<a href="{{ .RelPermalink }}" class="nav-prev">&larr; {{ .Title }}</a>{{ end }}
+        {{ with .NextInSection }}<a href="{{ .RelPermalink }}" class="nav-next">{{ .Title }} &rarr;</a>{{ end }}
+    </div>
+
+    <div class="comments" id="comments">
+        <h3>留言</h3>
+        <div id="utterances-container"></div>
+    </div>
+</article>
+
+<script>
+(function(){
+    var s=document.createElement('script');
+    s.src='https://utteranc.es/client.js';
+    s.setAttribute('repo','{{ .Site.Params.utterancesRepo }}');
+    s.setAttribute('issue-term','pathname');
+    s.setAttribute('theme','{{ if $.Site.Params.darkMode }}github-dark{{ else }}{{ .Site.Params.utterancesTheme }}{{ end }}');
+    s.setAttribute('crossorigin','anonymous');
+    s.async=true;
+    document.getElementById('utterances-container').appendChild(s);
+})();
+</script>
+{{ end }}
