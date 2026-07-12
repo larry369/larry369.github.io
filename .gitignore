@@ -1,0 +1,11 @@
+# Old static files
+index.html
+projects.html
+projects/
+script.js
+style.css
+
+# Hugo output
+public/
+resources/
+.hugo_build.lock
