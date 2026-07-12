@@ -1,8 +1,7 @@
 baseURL = "https://larry369.github.io/"
-languageCode = "zh-tw"
+locale = "zh-tw"
 defaultContentLanguage = "zh"
 title = "Larry Lai | Software Engineer"
-theme = ""
 
 [params]
   description = "Full-stack software engineer specializing in ERP, MES, and supply chain systems."
