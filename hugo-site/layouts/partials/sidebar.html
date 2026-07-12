@@ -1,6 +1,8 @@
 <aside class="sidebar">
     <div class="sidebar-card">
-        <div class="sidebar-avatar-placeholder">LL</div>
+        <div class="sidebar-avatar-wrap">
+            <img src="{{ "images/author.png" | relURL }}" alt="{{ .Site.Params.author }}" class="sidebar-avatar" onerror="this.parentElement.innerHTML='<div class=\'sidebar-avatar-fallback\'>LL</div>'">
+        </div>
         <h3 class="sidebar-name">{{ .Site.Params.author }}</h3>
         <p class="sidebar-bio">全端軟體工程師，專注於 ERP、MES 與供應鏈系統。</p>
         <div class="sidebar-social">

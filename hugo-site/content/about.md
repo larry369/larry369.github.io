@@ -2,7 +2,9 @@
 title: "關於我"
 ---
 <div class="about-hero">
-    <div class="about-avatar-placeholder">LL</div>
+    <div class="about-avatar-wrap">
+        <img src="{{ "images/author.png" | relURL }}" alt="賴彥廷" class="about-avatar" onerror="this.parentElement.innerHTML='<div class=\'about-avatar-fallback\'>LL</div>'">
+    </div>
     <div class="about-info">
         <h1>賴彥廷 <span style="font-weight:400;font-size:0.8em;color:var(--text2)">Larry Lai</span></h1>
         <p>全端軟體工程師，來自台灣彰化。</p>
