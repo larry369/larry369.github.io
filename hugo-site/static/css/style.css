@@ -128,6 +128,39 @@ body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans TC',s
 .skills-list{display:flex;flex-wrap:wrap;gap:8px}
 .skill-tag{font-size:0.82rem;padding:6px 16px;border-radius:980px;background:var(--tag-bg);color:var(--tag-text);font-weight:500}
 
+/* Placeholder avatar */
+.sidebar-avatar-placeholder,.about-avatar-placeholder{
+    width:80px;height:80px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),#7c3aed);
+    color:#fff;font-size:1.4rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:12px;flex-shrink:0;letter-spacing:1px;
+}
+.about-avatar-placeholder{width:120px;height:120px;font-size:2rem}
+
+/* Projects grid */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:24px}
+.project-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;transition:all 0.3s}
+.project-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.04)}
+[data-theme="dark"] .project-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.project-card h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+.project-tech{font-size:0.75rem;color:var(--accent);font-weight:600;margin-bottom:8px}
+.project-card p{font-size:0.85rem;color:var(--text2);line-height:1.6}
+.project-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+
+/* Homepage sections */
+.skills-grid-home{display:flex;flex-direction:column;gap:20px;margin-top:16px}
+.skill-group h4{font-size:0.82rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.skill-group{display:flex;flex-wrap:wrap;gap:6px}
+.skill-group .skill-tag{font-size:0.78rem;padding:4px 12px}
+.timeline-home{display:flex;flex-direction:column;gap:24px;margin-top:16px}
+.timeline-item-home{padding:20px;background:var(--card);border:1px solid var(--card-border);border-radius:10px;transition:all 0.3s}
+.timeline-item-home:hover{border-color:var(--accent)}
+.timeline-item-home .period{font-size:0.75rem;color:var(--accent);font-weight:600}
+.timeline-item-home h4{font-size:0.95rem;font-weight:600;margin:4px 0}
+.timeline-item-home p{font-size:0.85rem;color:var(--text2)}
+.post-content h2,.post-content h3{color:var(--text)}
+
 /* Responsive */
 @media(max-width:900px){
     .layout{grid-template-columns:1fr;gap:32px}
@@ -143,4 +176,5 @@ body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans TC',s
     .post-nav{flex-direction:column}
     .nav-next{text-align:left}
     .footer-inner{flex-direction:column;gap:8px}
+    .projects-grid{grid-template-columns:1fr}
 }
