@@ -6,7 +6,7 @@ title: "專案作品"
 
 <div class="projects-grid">
 
-<a href="{{ "/projects/warehouse/" | relURL }}" class="project-card">
+<a href="warehouse/" class="project-card">
 <h3>📦 一般／立體倉庫管理</h3>
 <p class="project-tech">ERP｜前後端</p>
 <p>串接 ERP，實現倉庫、托盤、儲格的完整管理流程。</p>
@@ -18,7 +18,7 @@ title: "專案作品"
 <span class="read-more">閱讀更多 &rarr;</span>
 </a>
 
-<a href="{{ "/projects/review/" | relURL }}" class="project-card">
+<a href="review/" class="project-card">
 <h3>🔍 自審核模組</h3>
 <p class="project-tech">Module｜前後端</p>
 <p>自定義審批流程，支援多層級審核與狀態追蹤。</p>
@@ -30,7 +30,7 @@ title: "專案作品"
 <span class="read-more">閱讀更多 &rarr;</span>
 </a>
 
-<a href="{{ "/projects/factory/" | relURL }}" class="project-card">
+<a href="factory/" class="project-card">
 <h3>🏭 廠務部功能模組</h3>
 <p class="project-tech">Module｜前後端</p>
 <p>完整的廠務業務流程，從詢價到領料一條龍管理。</p>
@@ -44,7 +44,7 @@ title: "專案作品"
 <span class="read-more">閱讀更多 &rarr;</span>
 </a>
 
-<a href="{{ "/projects/kanban/" | relURL }}" class="project-card">
+<a href="kanban/" class="project-card">
 <h3>📊 看板系統</h3>
 <p class="project-tech">MES｜前後端</p>
 <p>RFID 即時監控設備工件進度與站點資訊。</p>
@@ -56,7 +56,7 @@ title: "專案作品"
 <span class="read-more">閱讀更多 &rarr;</span>
 </a>
 
-<a href="{{ "/projects/mes/" | relURL }}" class="project-card">
+<a href="mes/" class="project-card">
 <h3>🧪 MES 前端框架</h3>
 <p class="project-tech">Framework｜前端</p>
 <p>自製 MES 系統前端框架，多國語系與模組化選單。</p>
@@ -68,7 +68,7 @@ title: "專案作品"
 <span class="read-more">閱讀更多 &rarr;</span>
 </a>
 
-<a href="{{ "/projects/dataFoundation/" | relURL }}" class="project-card">
+<a href="dataFoundation/" class="project-card">
 <h3>🔗 資料介接</h3>
 <p class="project-tech">Integration｜前後端</p>
 <p>MES 資料基礎建設，API 監控與 BI 串接。</p>
@@ -80,7 +80,7 @@ title: "專案作品"
 <span class="read-more">閱讀更多 &rarr;</span>
 </a>
 
-<a href="{{ "/projects/autoPush/" | relURL }}" class="project-card">
+<a href="autoPush/" class="project-card">
 <h3>☁️ 自動上傳程式</h3>
 <p class="project-tech">Tool｜主控台</p>
 <p>SVN 轉 GitLab 自動化遷移工具。</p>
