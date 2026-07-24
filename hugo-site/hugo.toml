@@ -8,6 +8,8 @@ title = "賴彥廷 | 全端軟體工程師"
   author = "賴彥廷"
   authorEn = "Larry Lai"
   dateFormat = "2006/01/02"
+  utterancesRepo = ""
+  utterancesTheme = "github-light"
 
 [params.social]
   github = "https://github.com/larry369"
